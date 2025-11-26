@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-declare const SOCIAL_MEDIAS: readonly ["pin", "instagram_media", "youtube_video", "article", "tweet", "facebook_status"];
-declare const PostTypeSchema: z.ZodEnum<["pin", "instagram_media", "youtube_video", "article", "tweet", "facebook_status"]>;
+declare const SOCIAL_MEDIAS: readonly ["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status"];
+declare const PostTypeSchema: z.ZodEnum<["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status"]>;
 type PostType = z.infer<typeof PostTypeSchema>;
 declare const PostSchema: z.ZodObject<{
     timestamp: z.ZodNumber;

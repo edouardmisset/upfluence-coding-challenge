@@ -21,42 +21,10 @@ export const PostTypeCard: React.FC<Props> = ({ type, count, data }) => {
   const color = COLORS[type] || 'var(--color-gray-500)'
 
   return (
-    <div
-      style={{
-        border: '1px solid var(--color-gray-200)',
-        padding: 'var(--space-md)',
-        borderRadius: 'var(--radius-lg)',
-        background: 'var(--bg-surface)',
-        boxShadow: '0 2px 4px var(--color-shadow)',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: 'var(--space-md)',
-          alignItems: 'center',
-        }}
-      >
-        <h3
-          style={{
-            margin: 0,
-            textTransform: 'capitalize',
-            color: 'var(--text-primary)',
-          }}
-        >
-          {postTypeToText(type)}
-        </h3>
-        <span
-          style={{
-            fontWeight: 'var(--font-weight-bold)',
-            fontSize: 'var(--font-size-xl)',
-            color,
-            background: 'var(--bg-surface-hover)',
-            padding: 'var(--space-xs) var(--space-sm)',
-            borderRadius: 'var(--radius-md)',
-          }}
-        >
+    <div className="post-type-card">
+      <div className="post-type-header">
+        <h3 className="post-type-title">{postTypeToText(type)}</h3>
+        <span className="post-type-count" style={{ color }}>
           {count}
         </span>
       </div>

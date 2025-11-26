@@ -5,11 +5,11 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
 // src/validators/schemas.ts
 import { z } from "zod";
 var SOCIAL_MEDIAS = [
-  "pin",
   "instagram_media",
   "youtube_video",
-  "article",
+  "pin",
   "tweet",
+  "article",
   "facebook_status"
 ];
 var PostTypeSchema = z.enum(SOCIAL_MEDIAS);

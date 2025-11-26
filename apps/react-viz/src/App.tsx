@@ -3,9 +3,25 @@ import { useAggregator } from './hooks/use-aggregator'
 import { usePerformanceMetrics } from './hooks/use-performance-metrics'
 import { PostTypeCard } from './components/post-type-card'
 import { ConnectionStatus } from './components/connection-status'
-import { ErrorBoundary } from './components/error-boundary'
+import { ErrorBoundary } from 'react-error-boundary'
 import { SOCIAL_MEDIAS } from '@upfluence/core'
 import './app.css'
+
+function ErrorFallback({
+  error,
+  resetErrorBoundary,
+}: {
+  error: Error
+  resetErrorBoundary: () => void
+}) {
+  return (
+    <div className="error-fallback">
+      <h2>Something went wrong.</h2>
+      <p>{error.message}</p>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </div>
+  )
+}
 
 function Dashboard() {
   const { isConnected, lastPost } = useSSEStream(
@@ -51,7 +67,7 @@ function Dashboard() {
 
 function App() {
   return (
-    <ErrorBoundary>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Dashboard />
     </ErrorBoundary>
   )

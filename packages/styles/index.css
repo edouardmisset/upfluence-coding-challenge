@@ -23,6 +23,30 @@
   --color-article: light-dark(var(--color-gray-800), var(--color-gray-200));
 
   /* Colors - Semantic */
+  --color-success: hsl(170deg 75% 35%);
+  --color-error: hsl(0deg 63% 48%);
+  --color-success-bg: color-mix(
+    in srgb,
+    var(--color-success),
+    hsl(0deg 0% 100%) 90%
+  );
+  --color-success-text: var(--color-success);
+  --color-success-border: color-mix(
+    in srgb,
+    var(--color-success),
+    hsl(0deg 0% 100%) 70%
+  );
+  --color-error-bg: color-mix(
+    in srgb,
+    var(--color-error),
+    hsl(0deg 0% 100%) 93%
+  );
+  --color-error-text: var(--color-error);
+  --color-error-border: color-mix(
+    in srgb,
+    var(--color-error),
+    hsl(0deg 0% 100%) 70%
+  );
   --text-primary: light-dark(var(--color-gray-900), var(--color-gray-100));
   --text-secondary: light-dark(var(--color-gray-600), var(--color-gray-400));
   --text-highlight: light-dark(var(--color-gray-800), var(--color-gray-200));

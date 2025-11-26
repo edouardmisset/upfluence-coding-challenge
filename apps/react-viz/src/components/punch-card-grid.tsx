@@ -13,24 +13,11 @@ export const PunchCardGrid: React.FC<Props> = ({ data, color }) => {
     Math.max(...Object.values(data).flatMap((day) => Object.values(day))) || 1
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(25, 1fr)',
-        gap: 2,
-      }}
-    >
+    <div className="punch-card-grid">
       {/* Header Row: Hours */}
       <div />
       {HOURS.map((h) => (
-        <div
-          key={h}
-          style={{
-            fontSize: 'var(--font-size-xs)',
-            textAlign: 'center',
-            color: 'var(--text-secondary)',
-          }}
-        >
+        <div key={h} className="punch-card-label">
           {h}
         </div>
       ))}
@@ -38,15 +25,7 @@ export const PunchCardGrid: React.FC<Props> = ({ data, color }) => {
       {/* Rows: Days */}
       {DAYS.map((dayName, dayIndex) => (
         <React.Fragment key={dayName}>
-          <div
-            style={{
-              fontSize: 'var(--font-size-xs)',
-              alignSelf: 'center',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            {dayName}
-          </div>
+          <div className="punch-card-row-label">{dayName}</div>
           {HOURS.map((hour) => {
             const count = data[dayIndex]?.[hour] || 0
             // Calculate intensity [0-5]
@@ -55,13 +34,12 @@ export const PunchCardGrid: React.FC<Props> = ({ data, color }) => {
             return (
               <div
                 key={hour}
+                className="punch-card-cell"
                 style={{
-                  aspectRatio: '1 / 1',
                   background:
                     intensity > 0
                       ? `color-mix(in oklch, ${color}, transparent ${100 - intensity * 20}%)`
                       : 'var(--bg-surface-hover)',
-                  borderRadius: 2,
                 }}
                 title={`${dayName} ${hour}:00 - ${count} posts`}
               />

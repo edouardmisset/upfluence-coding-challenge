@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
 export const SOCIAL_MEDIAS = [
-  'pin',
   'instagram_media',
   'youtube_video',
-  'article',
+  'pin',
   'tweet',
+  'article',
   'facebook_status',
 ] as const
 

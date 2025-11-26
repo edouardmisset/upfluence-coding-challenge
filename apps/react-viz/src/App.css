@@ -52,3 +52,118 @@
   grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width), 1fr));
   gap: var(--space-lg);
 }
+
+/* Connection Status */
+.connection-status {
+  padding: 0.375rem var(--space-sm);
+  border-radius: 1.25rem;
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.connection-status[data-connected='true'] {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+  border-color: var(--color-success-border);
+}
+
+.connection-status[data-connected='false'] {
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
+  border-color: var(--color-error-border);
+}
+
+.connection-status-indicator {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: 50%;
+  background: currentcolor;
+  display: inline-block;
+}
+
+.connection-status[data-connected='true'] .connection-status-indicator {
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--color-success-text), transparent 80%);
+}
+
+/* Post Type Card */
+.post-type-card {
+  border: 1px solid var(--color-gray-200);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.post-type-header {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: var(--space-md);
+  align-items: center;
+}
+
+.post-type-title {
+  margin: 0;
+  text-transform: capitalize;
+  color: var(--text-primary);
+}
+
+.post-type-count {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
+  background: var(--bg-surface-hover);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+}
+
+/* Punch Card Grid */
+.punch-card-grid {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  gap: 2px;
+}
+
+.punch-card-label {
+  font-size: var(--font-size-xs);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.punch-card-row-label {
+  font-size: var(--font-size-xs);
+  align-self: center;
+  color: var(--text-secondary);
+}
+
+.punch-card-cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 2px;
+}
+
+/* Error Fallback */
+.error-fallback {
+  padding: var(--space-lg);
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-error-text);
+  margin: var(--space-lg);
+}
+
+.error-fallback h2 {
+  margin-block-start: 0;
+}
+
+.error-fallback button {
+  padding: 0.5rem var(--space-md);
+  background: var(--color-error-text);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
