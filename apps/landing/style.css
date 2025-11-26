@@ -1,7 +1,7 @@
 @import url('@upfluence/styles/index.css');
 
 :root {
-  --width-container: 40rem;
+  --width-container: 65rem;
 }
 
 body {
@@ -31,16 +31,39 @@ p {
 }
 
 .btn {
+  --button-color: var(--color-primary);
+
   display: inline-block;
-  background: var(--color-primary);
   color: var(--text-inverse);
   padding: var(--space-sm) 1.5rem;
   border-radius: var(--radius-md);
   text-decoration: none;
   font-weight: 600;
-  transition: background 0.2s;
+  transition: background-color 0.2s;
+
+  &[data-variant='react'] {
+    --button-color: var(--color-react);
+  }
+
+  &[data-variant='vue'] {
+    --button-color: var(--color-vue);
+  }
+
+  &[data-variant='angular'] {
+    --button-color: var(--color-angular);
+  }
+
+  &[data-variant='svelte'] {
+    --button-color: var(--color-svelte);
+  }
+
+  &[data-variant='ember'] {
+    --button-color: var(--color-ember);
+  }
+
+  background-color: var(--button-color);
 
   &:hover {
-    background: var(--color-primary-hover);
+    background-color: hsl(from var(--button-color) h s calc(l + 10));
   }
 }

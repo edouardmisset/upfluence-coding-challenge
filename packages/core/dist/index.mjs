@@ -1,3 +1,7 @@
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+
 // src/validators/schemas.ts
 import { z } from "zod";
 var SOCIAL_MEDIAS = [
@@ -6,12 +10,15 @@ var SOCIAL_MEDIAS = [
   "pin",
   "tweet",
   "article",
-  "facebook_status"
+  "facebook_status",
+  "twitch_stream",
+  "tiktok_video",
+  "story"
 ];
 var PostTypeSchema = z.enum(SOCIAL_MEDIAS);
 var PostSchema = z.object({
+  /** Unix timestamp in seconds */
   timestamp: z.number()
-  // Unix timestamp in seconds
 });
 
 // src/utils/time-utils.ts
@@ -24,30 +31,30 @@ function getHourOfDay(timestamp) {
 
 // src/aggregator/post-aggregator.ts
 var PostAggregator = class {
-  data;
-  totals;
   constructor() {
-    this.data = {};
+    __publicField(this, "accumulator");
+    __publicField(this, "totals");
+    this.accumulator = {};
     this.totals = {};
   }
   increment(postType, timestamp) {
     const day = getDayOfWeek(timestamp);
     const hour = getHourOfDay(timestamp);
-    if (!this.data[postType]) {
-      this.data[postType] = {};
+    if (!this.accumulator[postType]) {
+      this.accumulator[postType] = {};
       this.totals[postType] = 0;
     }
-    if (!this.data[postType][day]) {
-      this.data[postType][day] = {};
+    if (!this.accumulator[postType][day]) {
+      this.accumulator[postType][day] = {};
     }
-    if (!this.data[postType][day][hour]) {
-      this.data[postType][day][hour] = 0;
+    if (!this.accumulator[postType][day][hour]) {
+      this.accumulator[postType][day][hour] = 0;
     }
-    this.data[postType][day][hour]++;
+    this.accumulator[postType][day][hour]++;
     this.totals[postType]++;
   }
   getData() {
-    return this.data;
+    return this.accumulator;
   }
   getTotal(postType) {
     return this.totals[postType] || 0;
@@ -58,11 +65,13 @@ var PostAggregator = class {
 };
 
 // src/stream/sse-client.ts
+var streamUrl = "https://stream.upfluence.co/stream";
+var refreshRateInMilliSeconds = 1e3;
 var SSEClient = class {
-  eventSource = null;
-  url;
-  options;
   constructor(url, options = {}) {
+    __publicField(this, "eventSource", null);
+    __publicField(this, "url");
+    __publicField(this, "options");
     this.url = url;
     this.options = options;
   }
@@ -113,5 +122,7 @@ export {
   SOCIAL_MEDIAS,
   SSEClient,
   getDayOfWeek,
-  getHourOfDay
+  getHourOfDay,
+  refreshRateInMilliSeconds,
+  streamUrl
 };

@@ -27,5 +27,8 @@
     "turbo": "latest",
     "typescript-eslint": "^8.48.0"
   },
-  "packageManager": "pnpm@10.23.0"
+  "packageManager": "pnpm@10.23.0",
+  "dependencies": {
+    "@edouardmisset/math": "npm:@jsr/edouardmisset__math@^5.0.0"
+  }
 }

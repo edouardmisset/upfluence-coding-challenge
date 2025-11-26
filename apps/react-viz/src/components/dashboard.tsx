@@ -3,12 +3,10 @@ import { useAggregator } from '../hooks/use-aggregator'
 import { usePerformanceMetrics } from '../hooks/use-performance-metrics'
 import { PostTypeCard } from './post-type-card'
 import { ConnectionStatus } from './connection-status'
-import { SOCIAL_MEDIAS } from '@upfluence/core'
+import { SOCIAL_MEDIAS, streamUrl } from '@upfluence/core'
 
 export function Dashboard() {
-  const { isConnected, lastPost } = useSSEStream(
-    'https://stream.upfluence.co/stream',
-  )
+  const { isConnected, lastPost } = useSSEStream(streamUrl)
   const { data, totals } = useAggregator(lastPost)
 
   const totalPosts = Object.values(totals).reduce((a, b) => a + b, 0)

@@ -40,6 +40,9 @@ const POST_TYPE_TEXT_MAP: Record<PostType, string> = {
   article: 'Article',
   tweet: 'Tweeter',
   facebook_status: 'Facebook',
+  twitch_stream: 'Twitch',
+  tiktok_video: 'TikTok',
+  story: 'Story',
 }
 
 function postTypeToText(type: PostType): React.ReactNode {

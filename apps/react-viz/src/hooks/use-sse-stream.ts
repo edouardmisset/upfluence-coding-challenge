@@ -2,12 +2,15 @@ import { useEffect, useState, useRef } from 'react'
 import { SSEClient } from '@upfluence/core'
 import type { PostType } from '@upfluence/core'
 
-export const useSSEStream = (url: string) => {
+export const useSSEStream = (url: string): UseSSEStreamOutput => {
   const [isConnected, setIsConnected] = useState(false)
-  const [lastPost, setLastPost] = useState<{
-    type: PostType
-    timestamp: number
-  } | null>(null)
+  const [lastPost, setLastPost] = useState<
+    | {
+        type: PostType
+        timestamp: number
+      }
+    | undefined
+  >(undefined)
   const clientRef = useRef<SSEClient | null>(null)
 
   useEffect(() => {
@@ -24,8 +27,20 @@ export const useSSEStream = (url: string) => {
 
     return () => {
       client.disconnect()
+      clientRef.current = null
+      setIsConnected(false)
     }
   }, [url])
 
   return { isConnected, lastPost }
+}
+
+export type PostEvent = {
+  type: PostType
+  timestamp: number
+}
+
+type UseSSEStreamOutput = {
+  isConnected: boolean
+  lastPost: PostEvent | undefined
 }

@@ -1,9 +1,10 @@
 import { z } from 'zod';
 
-declare const SOCIAL_MEDIAS: readonly ["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status"];
-declare const PostTypeSchema: z.ZodEnum<["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status"]>;
+declare const SOCIAL_MEDIAS: readonly ["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream", "tiktok_video", "story"];
+declare const PostTypeSchema: z.ZodEnum<["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream", "tiktok_video", "story"]>;
 type PostType = z.infer<typeof PostTypeSchema>;
 declare const PostSchema: z.ZodObject<{
+    /** Unix timestamp in seconds */
     timestamp: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
     timestamp: number;
@@ -11,6 +12,7 @@ declare const PostSchema: z.ZodObject<{
     timestamp: number;
 }>;
 type Post = z.infer<typeof PostSchema>;
+type Timestamp = Post['timestamp'];
 
 /**
  * Returns the UTC day of the week for a given timestamp.
@@ -20,27 +22,34 @@ type Post = z.infer<typeof PostSchema>;
  * @param timestamp - The timestamp in seconds.
  * @returns The day of the week (0 = Sunday, 1 = Monday, ...).
  */
-declare function getDayOfWeek(timestamp: number): number;
+declare function getDayOfWeek(timestamp: Timestamp): number;
 /**
  * Returns the UTC hour of the day for a given timestamp.
  * @param timestamp - The timestamp in seconds.
  * @returns The hour of the day (0-23).
  */
-declare function getHourOfDay(timestamp: number): number;
+declare function getHourOfDay(timestamp: Timestamp): number;
 
-type AggregatedData = Record<string, Record<number, Record<number, number>>>;
+/** [0 - 6] */
+type WeekDay = number;
+/** [0 - 23] */
+type HourOfDay = number;
+type Accumulator = Record<PostType, Record<WeekDay, Record<HourOfDay, number>>>;
+type Totals = Record<PostType, number>;
 declare class PostAggregator {
-    private data;
+    private accumulator;
     private totals;
     constructor();
-    increment(postType: PostType, timestamp: number): void;
-    getData(): AggregatedData;
+    increment(postType: PostType, timestamp: Timestamp): void;
+    getData(): Accumulator;
     getTotal(postType: PostType): number;
-    getAllTotals(): Record<string, number>;
+    getAllTotals(): Totals;
 }
 
+declare const streamUrl = "https://stream.upfluence.co/stream";
+declare const refreshRateInMilliSeconds = 1000;
 type SSEOptions = {
-    onMessage?: (type: PostType, timestamp: number) => void;
+    onMessage?: (type: PostType, timestamp: Timestamp) => void;
     onError?: (error: Event) => void;
     onOpen?: (event: Event) => void;
 };
@@ -53,4 +62,4 @@ declare class SSEClient {
     disconnect(): void;
 }
 
-export { type AggregatedData, type Post, PostAggregator, PostSchema, type PostType, PostTypeSchema, SOCIAL_MEDIAS, SSEClient, type SSEOptions, getDayOfWeek, getHourOfDay };
+export { type Accumulator, type Post, PostAggregator, PostSchema, type PostType, PostTypeSchema, SOCIAL_MEDIAS, SSEClient, type SSEOptions, type Timestamp, type Totals, getDayOfWeek, getHourOfDay, refreshRateInMilliSeconds, streamUrl };

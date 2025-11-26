@@ -10,9 +10,9 @@
   --color-gray-800: hsl(217deg 33% 17%);
   --color-gray-900: hsl(218deg 39% 11%);
 
-  /* Colors - Brand */
-  --color-primary: hsl(209deg 62% 50%);
-  --color-primary-hover: hsl(211deg 61% 43%);
+  /* Colors - Primary */
+  --color-primary: light-dark(hsl(209deg 62% 80%), hsl(209deg 62% 50%));
+  --color-primary-hover: light-dark(hsl(211deg 61% 90%), hsl(211deg 61% 43%));
 
   /* Colors - Social Networks */
   --color-facebook: hsl(220deg 46% 48%);
@@ -21,6 +21,13 @@
   --color-pinterest: hsl(351deg 100% 45%);
   --color-youtube: hsl(0deg 100% 50%);
   --color-article: light-dark(var(--color-gray-800), var(--color-gray-200));
+
+  /* Colors - Frameworks */
+  --color-react: hsl(191deg 65% 60%);
+  --color-vue: hsl(153deg 48% 49%);
+  --color-angular: hsl(306deg 91% 59%);
+  --color-svelte: hsl(12deg 94% 62%);
+  --color-ember: hsl(8deg 73% 55%);
 
   /* Colors - Semantic */
   --color-success: hsl(170deg 75% 35%);

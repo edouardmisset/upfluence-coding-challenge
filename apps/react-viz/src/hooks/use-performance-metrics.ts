@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
+import { roundToPrecision } from '@edouardmisset/math'
+import { refreshRateInMilliSeconds } from '@upfluence/core'
+import { useEffect, useRef, useState } from 'react'
 
 export const usePerformanceMetrics = (totalPosts: number) => {
   const [rate, setRate] = useState(0)
   const totalPostsRef = useRef(totalPosts)
-  const prevTotalRef = useRef(totalPosts)
+  const previousTotalRef = useRef(totalPosts)
   const lastTimeRef = useRef<number>(0)
 
-  // Keep ref in sync
   useEffect(() => {
     totalPostsRef.current = totalPosts
   }, [totalPosts])
@@ -16,17 +17,17 @@ export const usePerformanceMetrics = (totalPosts: number) => {
 
     const interval = setInterval(() => {
       const now = Date.now()
-      const timeDiff = (now - lastTimeRef.current) / 1000 // seconds
+      const timeDiff = (now - lastTimeRef.current) / refreshRateInMilliSeconds
       const currentTotal = totalPostsRef.current
-      const countDiff = currentTotal - prevTotalRef.current
+      const countDiff = currentTotal - previousTotalRef.current
 
       if (timeDiff > 0) {
-        setRate(Math.round((countDiff / timeDiff) * 10) / 10) // 1 decimal place
+        setRate(roundToPrecision(countDiff / timeDiff, 1))
       }
 
-      prevTotalRef.current = currentTotal
+      previousTotalRef.current = currentTotal
       lastTimeRef.current = now
-    }, 2000) // Update every 2 seconds for stability
+    }, 2 * refreshRateInMilliSeconds)
 
     return () => clearInterval(interval)
   }, [])

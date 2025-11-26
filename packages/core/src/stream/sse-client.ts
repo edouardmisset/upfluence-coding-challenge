@@ -1,7 +1,15 @@
-import { PostType, PostTypeSchema, PostSchema } from '../validators/schemas'
+import {
+  PostType,
+  PostTypeSchema,
+  PostSchema,
+  type Timestamp,
+} from '../validators/schemas'
+
+export const streamUrl = 'https://stream.upfluence.co/stream'
+export const refreshRateInMilliSeconds = 1_000
 
 export type SSEOptions = {
-  onMessage?: (type: PostType, timestamp: number) => void
+  onMessage?: (type: PostType, timestamp: Timestamp) => void
   onError?: (error: Event) => void
   onOpen?: (event: Event) => void
 }
