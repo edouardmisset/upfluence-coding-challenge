@@ -1,0 +1,5 @@
+node_modules/
+.turbo/
+test-results/
+playwright-report/
+.stylelintcache

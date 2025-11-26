@@ -1,0 +1,87 @@
+:root {
+  /* Colors - Gray Scale */
+  --color-gray-100: hsl(210deg 40% 96%);
+  --color-gray-200: hsl(214deg 32% 91%);
+  --color-gray-300: hsl(213deg 27% 84%);
+  --color-gray-400: hsl(215deg 20% 65%);
+  --color-gray-500: hsl(215deg 16% 47%);
+  --color-gray-600: hsl(215deg 19% 35%);
+  --color-gray-700: hsl(215deg 25% 27%);
+  --color-gray-800: hsl(217deg 33% 17%);
+  --color-gray-900: hsl(218deg 39% 11%);
+
+  /* Colors - Brand */
+  --color-primary: hsl(209deg 62% 50%);
+  --color-primary-hover: hsl(211deg 61% 43%);
+
+  /* Colors - Social Networks */
+  --color-facebook: hsl(220deg 46% 48%);
+  --color-twitter: hsl(203deg 89% 53%);
+  --color-instagram: hsl(43deg 100% 75%);
+  --color-pinterest: hsl(351deg 100% 45%);
+  --color-youtube: hsl(0deg 100% 50%);
+  --color-article: light-dark(var(--color-gray-800), var(--color-gray-200));
+
+  /* Colors - Semantic */
+  --text-primary: light-dark(var(--color-gray-900), var(--color-gray-100));
+  --text-secondary: light-dark(var(--color-gray-600), var(--color-gray-400));
+  --text-highlight: light-dark(var(--color-gray-800), var(--color-gray-200));
+  --text-inverse: hsl(0deg 0% 100%);
+  --bg-body: light-dark(var(--color-gray-100), var(--color-gray-900));
+  --bg-surface: light-dark(hsl(0deg 0% 100%), var(--color-gray-800));
+  --bg-surface-hover: light-dark(var(--color-gray-100), var(--color-gray-700));
+  --color-shadow: light-dark(hsl(218deg 39% 11% / 10%), hsl(0deg 0% 0% / 30%));
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 2.5rem;
+
+  /* Layout */
+  --max-width-container: 90rem;
+  --card-min-width: 32rem;
+
+  /* Typography */
+  --font-family-sans:
+    -apple-system, 'Segoe UI', roboto, helvetica, arial, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.75rem;
+
+  /* Base Settings */
+  font-family: var(--font-family-sans);
+  line-height: 1.5;
+  font-weight: var(--font-weight-normal);
+  color-scheme: light dark;
+  color: var(--text-primary);
+  background-color: var(--bg-body);
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-block-size: 100vh;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

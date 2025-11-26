@@ -1,0 +1,15 @@
+{
+  "name": "landing-page",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "mkdir -p dist && cp index.html dist/",
+    "lint": "prettier --check ."
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "@upfluence/styles": "workspace:*"
+  }
+}

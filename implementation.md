@@ -129,8 +129,8 @@ export const PostSchema = z.object({
 - **TypeScript** - Type safety
 - **Vite** - Fast dev server & build
 - **TanStack Query** (optional) - For connection state management
-- **Recharts** or **Visx** - Punch card visualization
-- **CSS Modules** - Styling
+- **Manual** - Punch card visualization
+- **CSS** - Styling
 - **Vitest + React Testing Library** - Testing
 
 **Key Components:**
@@ -226,51 +226,51 @@ packages:
 
 ### Phase 1: Core Package (Foundation)
 
-1. Setup `packages/core` with TypeScript
-2. Implement `SSEClient` with EventSource
-3. Create Zod schemas for post validation
-4. Build `PostAggregator` with nested Map structure
-5. Add time utilities (UNIX → UTC day/hour)
-6. Write unit tests for aggregation logic
+- [x] 1. Setup `packages/core` with TypeScript
+- [x] 2. Implement `SSEClient` with EventSource
+- [x] 3. Create Zod schemas for post validation
+- [x] 4. Build `PostAggregator` with nested Map structure
+- [x] 5. Add time utilities (UNIX → UTC day/hour)
+- [x] 6. Write unit tests for aggregation logic
 
 ### Phase 2: React App (Primary UI)
 
-1. Initialize Vite + React + TypeScript
-2. Create `useSSEStream` hook wrapping core client
-3. Build `PunchCardGrid` component
-4. Implement 6 `PostTypeCard` instances
-5. Add connection status indicator
-6. Style with responsive design
+- [x] 1. Initialize Vite + React + TypeScript
+- [x] 2. Create `useSSEStream` hook wrapping core client
+- [x] 3. Build `PunchCardGrid` component
+- [x] 4. Implement 6 `PostTypeCard` instances
+- [x] 5. Add connection status indicator
+- [x] 6. Style with responsive design
 
 ### Phase 3: Polish & Features
 
-1. Error boundaries and empty states
-2. Loading states with skeleton UI
-3. Accessibility (ARIA, keyboard nav)
-4. Dark mode toggle (if time permits)
-5. Performance metrics display (posts/sec) (if time permits)
+- [x] 1. Error boundaries and empty states
+- [x] 2. Loading states with skeleton UI
+- [x] 3. Accessibility (ARIA, keyboard nav)
+- [ ] 4. Dark mode toggle (if time permits)
+- [x] 5. Performance metrics display (posts/sec) (if time permits)
 
 ### Phase 4: Landing Page
 
-1. Create static HTML landing page
-2. Add links to `/viz` route
-3. Include tech stack overview
-4. Add screenshots/demo GIF
+- [x] 1. Create static HTML landing page
+- [x] 2. Add links to `/viz` route
+- [x] 3. Include tech stack overview
+- [ ] 4. Add screenshots/demo GIF
 
 ### Phase 5: Testing & Documentation
 
-1. Unit tests for core logic (>80% coverage)
-2. Integration tests for SSE handling
-3. E2E tests for critical paths (optional)
-4. Comprehensive README with diagrams
-5. Performance benchmarks documentation
+- [x] 1. Unit tests for core logic (>80% coverage)
+- [x] 2. Integration tests for SSE handling
+- [x] 3. E2E tests for critical paths (optional)
+- [x] 4. Comprehensive README with diagrams
+- [x] 5. Performance benchmarks documentation
 
 ### Phase 6: Deployment
 
-1. Deploy to Github Pages
-2. Configure monorepo build settings
-3. Test production build locally first
-4. Add live demo link to README
+- [ ] 1. Deploy to Github Pages
+- [x] 2. Configure monorepo build settings
+- [x] 3. Test production build locally first
+- [ ] 4. Add live demo link to README
 
 ## Technical Decisions & Rationale
 
@@ -345,11 +345,11 @@ packages:
 
 ## Open Questions
 
-1. **Visualization library**: Recharts vs Visx vs D3 vs custom Canvas?
-   - Recommendation: Recharts for simplicity
+1. **Visualization library**: Manual, Recharts vs Visx vs D3 vs custom Canvas?
+   - Recommendation: Manual for simplicity
 2. **State management**: Context API vs Zustand?
    - Recommendation: Start with Context, add Zustand if complexity grows
-3. **Styling**: Tailwind vs CSS Modules vs Styled Components?
-   - Recommendation: CSS Modules for ease of use
+3. **Styling**: Tailwind vs CSS vs Styled Components?
+   - Recommendation: CSS for ease of use and reusability
 4. **Memory strategy**: Sliding window? localStorage persistence?
    - Recommendation: 7-day sliding window, document in README

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["eslint.config.mjs"]
+    },
+    "packages/core": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "apps/react-viz": {
+      "entry": [
+        "index.html",
+        "src/main.tsx",
+        "vite.config.ts",
+        "playwright.config.ts",
+        "e2e/**/*.ts"
+      ],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "apps/landing": {
+      "entry": ["index.html", "vite.config.js"],
+      "project": ["**/*.{js,ts}"]
+    }
+  }
+}

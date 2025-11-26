@@ -1,0 +1,11 @@
+{
+  "extends": "stylelint-config-standard",
+  "plugins": ["stylelint-plugin-logical-css"],
+  "rules": {
+    "plugin/use-logical-properties-and-values": true,
+    "color-no-hex": true,
+    "color-named": "never",
+    "function-disallowed-list": ["rgb", "rgba"]
+  },
+  "ignoreFiles": ["**/dist/**", "**/node_modules/**", "**/coverage/**"]
+}

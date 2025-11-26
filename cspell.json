@@ -1,0 +1,33 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": [
+    "node_modules",
+    "dist",
+    "coverage",
+    ".git",
+    "pnpm-lock.yaml",
+    "package.json",
+    "tsconfig*.json",
+    "playwright-report",
+    "**/*.svg"
+  ],
+  "words": [
+    "upfluence",
+    "knip",
+    "tsup",
+    "vitest",
+    "zustand",
+    "turborepo",
+    "pnpm",
+    "vite",
+    "zod",
+    "jsxs",
+    "xlink",
+    "iconify",
+    "Avenir",
+    "Visx",
+    "Edouard",
+    "Misset"
+  ]
+}
