@@ -41,7 +41,7 @@ You can display the information using the rendering you want; however, we recomm
 
 Here an example:
 
-![](https://i.stack.imgur.com/2vX3Z.png)
+![punch card example](https://i.stack.imgur.com/2vX3Z.png)
 
 ## Technical spec
 
