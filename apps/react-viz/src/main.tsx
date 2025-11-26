@@ -1,9 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import '@upfluence/styles/index.css'
 import App from './app.tsx'
 
-createRoot(document.getElementById('root')!).render(
+const rootNode = document.getElementById('root')
+
+if (!rootNode) {
+  throw new Error('Root node not found')
+}
+
+createRoot(rootNode).render(
   <StrictMode>
     <App />
   </StrictMode>,

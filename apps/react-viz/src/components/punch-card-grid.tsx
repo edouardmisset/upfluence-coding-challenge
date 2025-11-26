@@ -25,7 +25,7 @@ export const PunchCardGrid: React.FC<Props> = ({ data, color }) => {
       {/* Rows: Days */}
       {DAYS.map((dayName, dayIndex) => (
         <React.Fragment key={dayName}>
-          <div className="punch-card-row-label">{dayName}</div>
+          <div className="punch-card-label">{dayName}</div>
           {HOURS.map((hour) => {
             const count = data[dayIndex]?.[hour] || 0
             // Calculate intensity [0-5]

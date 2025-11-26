@@ -1,7 +1,6 @@
 @import url('@upfluence/styles/index.css');
 
 :root {
-  /* Local overrides or additions */
   --width-container: 40rem;
 }
 

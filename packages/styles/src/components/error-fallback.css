@@ -1,0 +1,22 @@
+/* Error Fallback */
+.error-fallback {
+  padding: var(--space-lg);
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-error-text);
+  margin: var(--space-lg);
+}
+
+.error-fallback h2 {
+  margin-block-start: 0;
+}
+
+.error-fallback button {
+  padding: 0.5rem var(--space-md);
+  background: var(--color-error-text);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}

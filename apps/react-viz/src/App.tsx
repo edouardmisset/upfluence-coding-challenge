@@ -5,7 +5,6 @@ import { PostTypeCard } from './components/post-type-card'
 import { ConnectionStatus } from './components/connection-status'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SOCIAL_MEDIAS } from '@upfluence/core'
-import './app.css'
 
 function ErrorFallback({
   error,

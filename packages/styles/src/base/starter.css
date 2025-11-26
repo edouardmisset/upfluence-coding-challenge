@@ -1,0 +1,261 @@
+/*
+ * Kevin Powell's reset CSS:
+ * https://github.com/kevin-powell/website-starter-template-v3/
+ * 
+ * Remove all animations, transitions and smooth scroll for people that prefer not to see them:
+ * https://github.com/kevin-powell/demo-starter-template-with-sass/blob/main/src/sass/base/_reset.scss
+ * 
+ * 25 lines of CSS is all you need (to start with, anyway):
+ * https://www.youtube.com/shorts/ydGti7sLVOc
+ *
+ * Under the radar CSS features for your CSS reset:
+ * https://www.youtube.com/watch?v=cCAtD_BAHNw
+ * 
+ * A better image reset for your CSS:
+ * https://www.youtube.com/watch?v=345V2MU3E_w
+ * 
+ * Building out a furniture site from Dribbble by Andy Bell:
+ * https://piccalil.li/blog/reality-check-1-building-out-a-furniture-site-from-dribbble
+ * &
+ * https://piccalil.li/blog/a-more-modern-css-reset/
+ * 
+ * Josh Comeau:
+ * https://www.joshwcomeau.com/css/custom-css-reset/
+ *
+ * Modern CSS for dynamic component-based architecture by Stephanie Eckles:
+ * https://moderncss.dev/modern-css-for-dynamic-component-based-architecture/#css-reset-additions
+ *
+ * Jake Lazaroff:
+ * https://jakelazaroff.com/words/my-modern-css-reset/
+ *
+ * Animation and transitions' timing function values inspired by the
+ * "exponential smoothing" from lisyarus' blog: 
+ * https://lisyarus.github.io/blog/posts/exponential-smoothing.html
+*/
+
+:where(:root) {
+  color-scheme: light dark;
+  color: var(--text-primary);
+  background-color: var(--bg-body);
+}
+
+:where(html) {
+  font-weight: var(--font-weight-normal);
+  font-family: system-ui, sans-serif;
+
+  /* By default we enable dark mode */
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  hanging-punctuation: first last;
+  animation-timing-function: cubic-bezier(0, 0.3, 0.1, 1);
+  transition-timing-function: cubic-bezier(0, 0.3, 0.1, 1);
+}
+
+@supports (interpolate-size: allow-keywords) {
+  :where(:root) {
+    interpolate-size: allow-keywords;
+  }
+}
+
+::selection {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:where(body) {
+  min-block-size: 100svh;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+:where(ul, ol)[role='list'] {
+  list-style: none;
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  line-height: calc(1em + 0.5rem);
+  text-wrap: balance;
+}
+
+:where(p, h1, h2, h3, h4, h5, h6) {
+  overflow-wrap: break-word;
+}
+
+:where(p) {
+  /* ! WARNING the following might cause some unexpected problems */
+  max-inline-size: 65ch;
+  margin-block: 1lh; /* It's a good idea to use `margin-trim: block;` on the containing element to prevent margins + paddings stacking */
+  text-wrap: pretty;
+}
+
+:where(img, svg, picture, video) {
+  max-inline-size: 100%;
+  block-size: auto;
+  display: block;
+  font-style: italic;
+}
+
+/* Remove stroke and set fill color to the inherited font color */
+:where(svg) {
+  stroke: none;
+  fill: currentcolor;
+}
+
+/* SVG's without a fill attribute */
+:where(svg):where(:not([fill])) {
+  /* Remove fill and set stroke color to the inherited font color */
+  stroke: currentcolor;
+  fill: none;
+
+  /* Rounded stroke */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Set a size for SVG's without a width attribute */
+:where(svg):where(:not([width])) {
+  inline-size: 5rem;
+}
+
+/* !!!!!!! THIS NEEDS TESTING !!!!! */
+:where(a) {
+  --a-color: hsl(235deg 100% 70%);
+
+  color: var(--a-color);
+  font-weight: 500;
+  text-decoration-skip-ink: auto;
+
+  /* Relatively sized thickness and offset */
+  text-decoration-thickness: max(0.08em, 1px);
+  text-underline-offset: 0.15em;
+
+  &:hover {
+    color: color-mix(in oklab, var(--a-color), white 10%);
+  }
+
+  &:visited {
+    color: color-mix(in oklab, var(--a-color), white 20%);
+  }
+}
+
+:where(input:user-valid) {
+  outline-offset: 2px;
+  outline: greenyellow solid 2px;
+}
+
+:where(input:user-invalid) {
+  outline-offset: 2px;
+  outline: tomato solid 2px;
+}
+
+:where(input:is(:-webkit-autofill, :autofill)) {
+  border: 2px solid darkorange;
+}
+
+/* Progressive enhancements */
+@supports (field-sizing: content) {
+  :where(textarea, select, input) {
+    field-sizing: content;
+  }
+}
+
+:where(input, button, textarea, select) {
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  color: currentcolor;
+}
+
+:where(button, label, select, summary, [role='button'], [role='option']) {
+  cursor: pointer;
+}
+
+:where(:disabled) {
+  cursor: not-allowed;
+}
+
+:where(label:has(> input:disabled), label:has(+ input:disabled)) {
+  cursor: not-allowed;
+}
+
+/* Make sure textareas without a rows attribute are not tiny */
+:where(textarea:not([rows])) {
+  min-block-size: 10em;
+}
+
+/* Change textarea resize to vertical only and block only if the browser supports that */
+:where(textarea) {
+  resize: block;
+}
+
+@supports (resize: block) {
+  :where(textarea) {
+    resize: block;
+  }
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer
+not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-delay: 0s !important;
+  }
+}
+
+:focus-visible {
+  --outline-size: max(2px, 0.15em);
+
+  outline: var(--outline-size) solid currentcolor;
+  outline-offset: var(--outline-size);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :has(:target, :focus-visible) {
+    scroll-behavior: smooth;
+    scroll-padding-block: 8vh;
+  }
+
+  /* Enable view transitions in supporting browsers */
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+/* Create a root stacking context */
+:where(#root, #app) {
+  isolation: isolate;
+}
+
+.light {
+  /* forces light color-scheme */
+  color-scheme: light;
+}
+
+.dark {
+  /* forces dark color-scheme */
+  color-scheme: dark;
+}
