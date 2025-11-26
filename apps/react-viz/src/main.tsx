@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import '@upfluence/styles/index.css'
 import App from './app.tsx'
+import '@upfluence/styles/index.css'
 
 const rootNode = document.getElementById('root')
 
