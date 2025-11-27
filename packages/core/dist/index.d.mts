@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 declare const SOCIAL_MEDIAS: readonly ["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream", "tiktok_video", "story"];
-declare const PostTypeSchema: z.ZodEnum<["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream", "tiktok_video", "story"]>;
-type PostType = z.infer<typeof PostTypeSchema>;
-declare const PostSchema: z.ZodObject<{
+declare const SocialMediasSchema: z.ZodEnum<["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream", "tiktok_video", "story"]>;
+type SocialMedias = z.infer<typeof SocialMediasSchema>;
+declare const ContentSchema: z.ZodObject<{
     /** Unix timestamp in seconds */
     timestamp: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
@@ -11,8 +11,8 @@ declare const PostSchema: z.ZodObject<{
 }, {
     timestamp: number;
 }>;
-type Post = z.infer<typeof PostSchema>;
-type Timestamp = Post['timestamp'];
+type Content = z.infer<typeof ContentSchema>;
+type Timestamp = Content['timestamp'];
 
 /**
  * Returns the UTC day of the week for a given timestamp.
@@ -34,22 +34,22 @@ declare function getHourOfDay(timestamp: Timestamp): number;
 type WeekDay = number;
 /** [0 - 23] */
 type HourOfDay = number;
-type Accumulator = Record<PostType, Record<WeekDay, Record<HourOfDay, number>>>;
-type Totals = Record<PostType, number>;
+type Accumulator = Record<SocialMedias, Record<WeekDay, Record<HourOfDay, number>>>;
+type Totals = Record<SocialMedias, number>;
 declare class PostAggregator {
     private accumulator;
     private totals;
     constructor();
-    increment(postType: PostType, timestamp: Timestamp): void;
+    increment(postType: SocialMedias, timestamp: Timestamp): void;
     getData(): Accumulator;
-    getTotal(postType: PostType): number;
+    getTotal(postType: SocialMedias): number;
     getAllTotals(): Totals;
 }
 
 declare const streamUrl = "https://stream.upfluence.co/stream";
 declare const refreshRateInMilliSeconds = 1000;
 type SSEOptions = {
-    onMessage?: (type: PostType, timestamp: Timestamp) => void;
+    onMessage?: (type: SocialMedias, timestamp: Timestamp) => void;
     onError?: (error: Event) => void;
     onOpen?: (event: Event) => void;
 };
@@ -62,4 +62,4 @@ declare class SSEClient {
     disconnect(): void;
 }
 
-export { type Accumulator, type Post, PostAggregator, PostSchema, type PostType, PostTypeSchema, SOCIAL_MEDIAS, SSEClient, type SSEOptions, type Timestamp, type Totals, getDayOfWeek, getHourOfDay, refreshRateInMilliSeconds, streamUrl };
+export { type Accumulator, type Content, ContentSchema, PostAggregator, SOCIAL_MEDIAS, SSEClient, type SSEOptions, type SocialMedias, SocialMediasSchema, type Timestamp, type Totals, getDayOfWeek, getHourOfDay, refreshRateInMilliSeconds, streamUrl };

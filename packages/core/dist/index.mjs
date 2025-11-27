@@ -1,7 +1,3 @@
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-
 // src/validators/schemas.ts
 import { z } from "zod";
 var SOCIAL_MEDIAS = [
@@ -15,8 +11,8 @@ var SOCIAL_MEDIAS = [
   "tiktok_video",
   "story"
 ];
-var PostTypeSchema = z.enum(SOCIAL_MEDIAS);
-var PostSchema = z.object({
+var SocialMediasSchema = z.enum(SOCIAL_MEDIAS);
+var ContentSchema = z.object({
   /** Unix timestamp in seconds */
   timestamp: z.number()
 });
@@ -31,9 +27,9 @@ function getHourOfDay(timestamp) {
 
 // src/aggregator/post-aggregator.ts
 var PostAggregator = class {
+  accumulator;
+  totals;
   constructor() {
-    __publicField(this, "accumulator");
-    __publicField(this, "totals");
     this.accumulator = {};
     this.totals = {};
   }
@@ -68,10 +64,10 @@ var PostAggregator = class {
 var streamUrl = "https://stream.upfluence.co/stream";
 var refreshRateInMilliSeconds = 1e3;
 var SSEClient = class {
+  eventSource = null;
+  url;
+  options;
   constructor(url, options = {}) {
-    __publicField(this, "eventSource", null);
-    __publicField(this, "url");
-    __publicField(this, "options");
     this.url = url;
     this.options = options;
   }
@@ -88,20 +84,20 @@ var SSEClient = class {
     };
     this.eventSource.onmessage = (event) => {
       try {
-        const data = JSON.parse(event.data);
-        const keys = Object.keys(data);
+        const json = JSON.parse(event.data);
+        const keys = Object.keys(json);
         if (keys.length !== 1) return;
-        const eventType = keys[0];
-        const eventPayload = data[eventType];
-        const parsedEventType = PostTypeSchema.safeParse(eventType);
-        const parsedPayload = PostSchema.safeParse(eventPayload);
-        if (parsedEventType.success && parsedPayload.success) {
+        const socialMedia = keys[0];
+        const content = json[socialMedia];
+        const parsedSocialMedia = SocialMediasSchema.safeParse(socialMedia);
+        const parsedContent = ContentSchema.safeParse(content);
+        if (parsedSocialMedia.success && parsedContent.success) {
           this.options.onMessage?.(
-            parsedEventType.data,
-            parsedPayload.data.timestamp
+            parsedSocialMedia.data,
+            parsedContent.data.timestamp
           );
         } else {
-          console.warn("Invalid payload:", data);
+          console.warn("Invalid payload:", json);
         }
       } catch (e) {
         console.error("Failed to parse SSE message", e);
@@ -116,11 +112,11 @@ var SSEClient = class {
   }
 };
 export {
+  ContentSchema,
   PostAggregator,
-  PostSchema,
-  PostTypeSchema,
   SOCIAL_MEDIAS,
   SSEClient,
+  SocialMediasSchema,
   getDayOfWeek,
   getHourOfDay,
   refreshRateInMilliSeconds,

@@ -1,20 +1,22 @@
 import { useEffect, useState, useRef } from 'react'
 import { PostAggregator, refreshRateInMilliSeconds } from '@upfluence/core'
-import type { PostType, Accumulator, Timestamp, Totals } from '@upfluence/core'
+import type { Accumulator, Totals } from '@upfluence/core'
+import type { SocialEvent } from './use-sse-stream'
 
-export const useAggregator = (lastPost: PostEvent): UseAggregatorOutput => {
+export const useAggregator = (socialEvent: SocialEvent | undefined): UseAggregatorOutput => {
   const aggregatorRef = useRef(new PostAggregator())
   const [data, setData] = useState<Accumulator>({} as Accumulator)
   const [totals, setTotals] = useState<Totals>({} as Totals)
 
   useEffect(() => {
-    if (lastPost) {
-      aggregatorRef.current.increment(lastPost.type, lastPost.timestamp)
+    if (socialEvent) {
+      const { socialMedia, timestamp } = socialEvent
+      aggregatorRef.current.increment(socialMedia, timestamp)
     }
-  }, [lastPost])
+  }, [socialEvent])
 
   useEffect(() => {
-    // Update data and totals at a regular interval (refresh rate)
+    // Update data and totals at a given refresh rate
     const interval = setInterval(() => {
       setData({ ...aggregatorRef.current.getData() })
       setTotals({ ...aggregatorRef.current.getAllTotals() })
@@ -25,13 +27,6 @@ export const useAggregator = (lastPost: PostEvent): UseAggregatorOutput => {
 
   return { data, totals }
 }
-
-type PostEvent =
-  | {
-      type: PostType
-      timestamp: Timestamp
-    }
-  | undefined
 
 type UseAggregatorOutput = {
   data: Accumulator

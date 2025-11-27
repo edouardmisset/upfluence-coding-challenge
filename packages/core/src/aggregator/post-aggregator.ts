@@ -1,4 +1,4 @@
-import { SocialMedias as SocialMedias, type Timestamp } from '../validators/schemas'
+import { SocialMedias, type Timestamp } from '../validators/schemas'
 import { getDayOfWeek, getHourOfDay } from '../utils/time-utils'
 
 /** [0 - 6] */

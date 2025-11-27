@@ -6,7 +6,7 @@ import { ConnectionStatus } from './connection-status'
 import { SOCIAL_MEDIAS, streamUrl } from '@upfluence/core'
 
 export function Dashboard() {
-  const { isConnected, lastPost } = useSSEStream(streamUrl)
+  const { isConnected, lastSocialEvent: lastPost } = useSSEStream(streamUrl)
   const { data, totals } = useAggregator(lastPost)
 
   const totalPosts = Object.values(totals).reduce((a, b) => a + b, 0)
@@ -35,7 +35,7 @@ export function Dashboard() {
         {SOCIAL_MEDIAS.map((type) => (
           <PostTypeCard
             key={type}
-            type={type}
+            socialMedia={type}
             count={totals[type] || 0}
             data={data[type] || {}}
           />
