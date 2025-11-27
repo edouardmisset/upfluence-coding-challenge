@@ -1,4 +1,4 @@
-import { PostType, type Timestamp } from '../validators/schemas'
+import { SocialMedias as SocialMedias, type Timestamp } from '../validators/schemas'
 import { getDayOfWeek, getHourOfDay } from '../utils/time-utils'
 
 /** [0 - 6] */
@@ -6,11 +6,11 @@ type WeekDay = number
 /** [0 - 23] */
 type HourOfDay = number
 export type Accumulator = Record<
-  PostType,
+  SocialMedias,
   Record<WeekDay, Record<HourOfDay, number>>
 >
 
-export type Totals = Record<PostType, number>
+export type Totals = Record<SocialMedias, number>
 
 export class PostAggregator {
   private accumulator: Accumulator
@@ -21,7 +21,7 @@ export class PostAggregator {
     this.totals = {} as Totals
   }
 
-  increment(postType: PostType, timestamp: Timestamp) {
+  increment(postType: SocialMedias, timestamp: Timestamp) {
     const day = getDayOfWeek(timestamp)
     const hour = getHourOfDay(timestamp)
 
@@ -44,7 +44,7 @@ export class PostAggregator {
     return this.accumulator
   }
 
-  getTotal(postType: PostType): number {
+  getTotal(postType: SocialMedias): number {
     return this.totals[postType] || 0
   }
 

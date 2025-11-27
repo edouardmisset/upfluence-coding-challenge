@@ -1,7 +1,7 @@
 import {
-  PostType,
-  PostTypeSchema,
-  PostSchema,
+  SocialMedias,
+  SocialMediasSchema,
+  ContentSchema,
   type Timestamp,
 } from '../validators/schemas'
 
@@ -9,7 +9,7 @@ export const streamUrl = 'https://stream.upfluence.co/stream'
 export const refreshRateInMilliSeconds = 1_000
 
 export type SSEOptions = {
-  onMessage?: (type: PostType, timestamp: Timestamp) => void
+  onMessage?: (type: SocialMedias, timestamp: Timestamp) => void
   onError?: (error: Event) => void
   onOpen?: (event: Event) => void
 }
@@ -41,24 +41,23 @@ export class SSEClient {
 
     this.eventSource.onmessage = (event) => {
       try {
-        const data = JSON.parse(event.data)
-        const keys = Object.keys(data)
+        const json = JSON.parse(event.data)
+        const keys = Object.keys(json)
         if (keys.length !== 1) return
 
-        const eventType = keys[0]
-        const eventPayload = data[eventType]
+        const socialMedia = keys[0]
+        const content = json[socialMedia]
 
-        // Validate
-        const parsedEventType = PostTypeSchema.safeParse(eventType)
-        const parsedPayload = PostSchema.safeParse(eventPayload)
+        const parsedSocialMedia = SocialMediasSchema.safeParse(socialMedia)
+        const parsedContent = ContentSchema.safeParse(content)
 
-        if (parsedEventType.success && parsedPayload.success) {
+        if (parsedSocialMedia.success && parsedContent.success) {
           this.options.onMessage?.(
-            parsedEventType.data,
-            parsedPayload.data.timestamp,
+            parsedSocialMedia.data,
+            parsedContent.data.timestamp,
           )
         } else {
-          console.warn('Invalid payload:', data)
+          console.warn('Invalid payload:', json)
         }
       } catch (e) {
         console.error('Failed to parse SSE message', e)

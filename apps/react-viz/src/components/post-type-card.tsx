@@ -33,6 +33,7 @@ export const PostTypeCard: React.FC<Props> = ({ type, count, data }) => {
   )
 }
 
+// TODO : this should be in another file (constants.ts in the core package) and also contain the colors, etc.
 const POST_TYPE_TEXT_MAP: Record<PostType, string> = {
   pin: 'Pinterest',
   instagram_media: 'Instagram',
@@ -45,6 +46,7 @@ const POST_TYPE_TEXT_MAP: Record<PostType, string> = {
   story: 'Story',
 }
 
-function postTypeToText(type: PostType): React.ReactNode {
+// TODO : Move to helper file in the core package
+function postTypeToText(type: PostType): string {
   return POST_TYPE_TEXT_MAP[type] || type.replace('_', ' ')
 }

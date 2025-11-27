@@ -12,15 +12,15 @@ export const SOCIAL_MEDIAS = [
   'story',
 ] as const
 
-export const PostTypeSchema = z.enum(SOCIAL_MEDIAS)
+export const SocialMediasSchema = z.enum(SOCIAL_MEDIAS)
 
-export type PostType = z.infer<typeof PostTypeSchema>
+export type SocialMedias = z.infer<typeof SocialMediasSchema>
 
-export const PostSchema = z.object({
+export const ContentSchema = z.object({
   /** Unix timestamp in seconds */
   timestamp: z.number(),
 })
 
-export type Post = z.infer<typeof PostSchema>
+export type Content = z.infer<typeof ContentSchema>
 
-export type Timestamp = Post['timestamp']
+export type Timestamp = Content['timestamp']

@@ -1,7 +1,8 @@
+import type { Accumulator } from '@upfluence/core'
 import React from 'react'
 
 type Props = {
-  data: Record<number, Record<number, number>> // day -> hour -> count
+  data: Accumulator[keyof Accumulator] // day -> hour -> count
   color: string
 }
 
