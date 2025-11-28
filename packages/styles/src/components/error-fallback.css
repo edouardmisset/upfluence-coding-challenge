@@ -1,4 +1,3 @@
-/* Error Fallback */
 .error-fallback {
   padding: var(--space-lg);
   background: var(--color-error-bg);
@@ -15,7 +14,7 @@
 .error-fallback button {
   padding: 0.5rem var(--space-md);
   background: var(--color-error-text);
-  color: var(--text-inverse);
+  color: var(--color-gray-100);
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;

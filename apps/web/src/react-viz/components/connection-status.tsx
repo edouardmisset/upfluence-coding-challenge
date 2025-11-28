@@ -1,8 +1,8 @@
-import type { UseSSEStreamOutput } from '../hooks/use-sse-stream'
+import type { useStreamService } from '../hooks/use-stream-service'
 
 export function ConnectionStatus({
   isConnected,
-}: Pick<UseSSEStreamOutput, 'isConnected'>) {
+}: Pick<ReturnType<typeof useStreamService>, 'isConnected'>) {
   return (
     <div
       className="connection-status"

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { EventAccumulator } from './post-accumulator'
+import { EventAccumulator } from './event-accumulator'
 
 describe('PostAggregator', () => {
   let aggregator: EventAccumulator

@@ -1,5 +1,7 @@
 // src/validators/schemas.ts
 import { z } from "zod";
+
+// src/constants.ts
 var SOCIAL_MEDIAS = [
   "tiktok_video",
   "instagram_media",
@@ -11,6 +13,46 @@ var SOCIAL_MEDIAS = [
   "facebook_status",
   "twitch_stream"
 ];
+var SOCIAL_MEDIA_TEXT_MAP = {
+  pin: "Pinterest",
+  instagram_media: "Instagram",
+  youtube_video: "YouTube",
+  article: "Article",
+  tweet: "Tweeter",
+  facebook_status: "Facebook",
+  twitch_stream: "Twitch",
+  tiktok_video: "TikTok",
+  story: "Story"
+};
+var DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+var HOURS = [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23
+];
+
+// src/validators/schemas.ts
 var SocialMediasSchema = z.enum(SOCIAL_MEDIAS);
 var ContentSchema = z.object({
   /** Unix timestamp in seconds */
@@ -25,7 +67,7 @@ function getHourOfDay(timestamp) {
   return new Date(timestamp * 1e3).getUTCHours();
 }
 
-// src/accumulator/post-accumulator.ts
+// src/accumulator/event-accumulator.ts
 var EventAccumulator = class {
   accumulator;
   totals;
@@ -111,12 +153,126 @@ var SSEClient = class {
     }
   }
 };
+
+// src/utils/performance-tracker.ts
+var PerformanceTracker = class {
+  lastTime = 0;
+  previousTotal = 0;
+  rate = 0;
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.lastTime = Date.now();
+    this.previousTotal = 0;
+    this.rate = 0;
+  }
+  update(currentTotal) {
+    const now = Date.now();
+    const timeDifferenceInSeconds = (now - this.lastTime) / 1e3;
+    if (timeDifferenceInSeconds > 0) {
+      const countDiff = currentTotal - this.previousTotal;
+      this.rate = this.roundToPrecision(countDiff / timeDifferenceInSeconds, 1);
+    }
+    this.previousTotal = currentTotal;
+    this.lastTime = now;
+  }
+  getRate() {
+    return this.rate;
+  }
+  roundToPrecision(value, precision) {
+    const factor = 10 ** precision;
+    return Math.round(value * factor) / factor;
+  }
+};
+
+// src/services/stream-service.ts
+var StreamService = class {
+  client;
+  accumulator;
+  performanceTracker;
+  listeners = /* @__PURE__ */ new Set();
+  state;
+  updateInterval = null;
+  constructor(url) {
+    this.accumulator = new EventAccumulator();
+    this.performanceTracker = new PerformanceTracker();
+    this.state = {
+      isConnected: false,
+      accumulator: this.accumulator.getData(),
+      totals: this.accumulator.getAllTotals(),
+      eventsPerSecond: 0,
+      totalEvents: 0
+    };
+    this.client = new SSEClient(url, {
+      onOpen: () => this.handleConnectionChange(true),
+      onError: () => this.handleConnectionChange(false),
+      onMessage: (type, timestamp) => this.handleMessage(type, timestamp)
+    });
+  }
+  connect() {
+    this.client.connect();
+    this.startUpdateLoop();
+  }
+  disconnect() {
+    this.client.disconnect();
+    this.stopUpdateLoop();
+    this.handleConnectionChange(false);
+  }
+  subscribe(listener) {
+    this.listeners.add(listener);
+    listener(this.state);
+    return () => {
+      this.listeners.delete(listener);
+    };
+  }
+  handleConnectionChange(isConnected) {
+    this.state = { ...this.state, isConnected };
+    this.notifyListeners();
+  }
+  handleMessage(type, timestamp) {
+    this.accumulator.increment(type, timestamp);
+  }
+  startUpdateLoop() {
+    if (this.updateInterval) return;
+    this.updateInterval = setInterval(() => {
+      this.updateState();
+    }, refreshRateInMilliSeconds);
+  }
+  stopUpdateLoop() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+      this.updateInterval = null;
+    }
+  }
+  updateState() {
+    const totals = this.accumulator.getAllTotals();
+    const totalEvents = Object.values(totals).reduce((a, b) => a + b, 0);
+    this.performanceTracker.update(totalEvents);
+    this.state = {
+      ...this.state,
+      accumulator: { ...this.accumulator.getData() },
+      totals: { ...totals },
+      eventsPerSecond: this.performanceTracker.getRate(),
+      totalEvents
+    };
+    this.notifyListeners();
+  }
+  notifyListeners() {
+    this.listeners.forEach((listener) => listener(this.state));
+  }
+};
 export {
   ContentSchema,
+  DAYS,
   EventAccumulator,
+  HOURS,
+  PerformanceTracker,
   SOCIAL_MEDIAS,
+  SOCIAL_MEDIA_TEXT_MAP,
   SSEClient,
   SocialMediasSchema,
+  StreamService,
   getDayOfWeek,
   getHourOfDay,
   refreshRateInMilliSeconds,

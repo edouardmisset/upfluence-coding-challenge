@@ -1,16 +1,16 @@
-import { useSSEStream } from '../hooks/use-sse-stream'
-import { useAccumulator } from '../hooks/use-accumulator'
-import { usePerformanceMetrics } from '../hooks/use-performance-metrics'
+import { useStreamService } from '../hooks/use-stream-service'
 import { SocialEventCard } from './social-event-card'
 import { ConnectionStatus } from './connection-status'
-import { SOCIAL_MEDIAS, streamUrl } from '@upfluence/core'
+import { SOCIAL_MEDIAS } from '@upfluence/core'
 
 export function Dashboard() {
-  const { isConnected, lastSocialEvent } = useSSEStream(streamUrl)
-  const { accumulator, totals } = useAccumulator(lastSocialEvent)
-
-  const totalEvents = Object.values(totals).reduce((a, b) => a + b, 0)
-  const { eventsPerSecond } = usePerformanceMetrics(totalEvents)
+  const {
+    isConnected,
+    accumulator,
+    totals,
+    eventsPerSecond,
+    totalEvents = 0,
+  } = useStreamService()
 
   return (
     <div className="dashboard-container">
