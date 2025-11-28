@@ -31,7 +31,7 @@ Front-end application that visualizes social media posts in 3D using real-time S
 - **Framework**: Ember.js recommended (bonus points) or modern framework of choice
 - **Data Source**: SSE stream at `https://stream.upfluence.co/stream`
 - **Payload Format**: JSON with post type as key, object with `timestamp` (UNIX) as value
-- **Visualization**: Punch card style recommended (like GitHub contribution graph)
+- **Visualization**: Weekly calendar graph style recommended (like GitHub contribution graph)
 
 ## Architecture & Patterns
 
@@ -47,7 +47,7 @@ Front-end application that visualizes social media posts in 3D using real-time S
 
 - **Stream Service** - Manages SSE connection, reconnection logic, error handling
 - **Data Aggregator** - Buckets posts by type/day/hour, maintains counters
-- **Visualization Components** - One per post type, renders punch card + counter
+- **Visualization Components** - One per post type, renders weekly calendar graph + counter
 - **Time Utilities** - UNIX timestamp → UTC day/hour conversion
 
 ### Data Structure
@@ -78,7 +78,7 @@ Recommended aggregate structure for O(1) lookups and efficient memory usage:
 
 - O(1) increment: `data[postType][day][hour]++`
 - Sparse storage - only allocates populated buckets
-- Direct mapping to punch card coordinates
+- Direct mapping to weekly calendar graph coordinates
 - Easy serialization for state persistence
 
 **Alternative (pre-allocated arrays):** Use `number[7][24]` per post type if all buckets will be populated - faster iteration but uses more memory.

@@ -5,5 +5,5 @@
 @import url('./src/layout/dashboard.css') layer(layout);
 @import url('./src/components/connection-status.css') layer(components);
 @import url('./src/components/social-event-card.css') layer(components);
-@import url('./src/components/punch-card-grid.css') layer(components);
+@import url('./src/components/weekly-calendar-graph.css') layer(components);
 @import url('./src/components/error-fallback.css') layer(components);

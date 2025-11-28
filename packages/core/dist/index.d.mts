@@ -77,7 +77,7 @@ declare const createSSEClient: (url: string, options?: SSEOptions) => {
 };
 
 /**
- * Calculate the intensity level for a punch card cell based on the count and
+ * Calculate the intensity level for a weekly calendar graph cell based on the count and
  * the maximum count.
  *
  * @param {number} count - The number of events for the given hour and day.

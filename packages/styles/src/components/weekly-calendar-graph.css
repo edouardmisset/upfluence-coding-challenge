@@ -1,16 +1,16 @@
-.punch-card-grid {
+.weekly-calendar-graph {
   display: grid;
   grid-template-columns: repeat(25, 1fr);
   gap: 2px;
 }
 
-.punch-card-label {
+.weekly-calendar-graph-label {
   font-size: var(--font-size-xs);
   text-align: center;
   color: var(--text-secondary);
 }
 
-.punch-card-cell {
+.weekly-calendar-graph-cell {
   aspect-ratio: 1;
   border-radius: 2px;
   background-color: var(--bg-surface-hover);

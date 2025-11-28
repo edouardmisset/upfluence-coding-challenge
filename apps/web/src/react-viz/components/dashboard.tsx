@@ -13,7 +13,7 @@ export function Dashboard() {
   } = useStreamService()
 
   return (
-    <div className="dashboard-container">
+    <main className="dashboard-container">
       <header className="dashboard-header">
         <div>
           <h1 className="dashboard-title">Upfluence Live Stream</h1>
@@ -41,6 +41,6 @@ export function Dashboard() {
           />
         ))}
       </div>
-    </div>
+    </main>
   )
 }

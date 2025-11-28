@@ -13,7 +13,7 @@ demonstrate production-ready patterns.
 ## 🚀 Features
 
 - **Real-time Visualization**: Updates instantly via SSE stream (<5s latency).
-- **3D Punch Card**: Visualizes posts by Day of Week × Hour of Day.
+- **3D Weekly Calendar Graph**: Visualizes posts by Day of Week × Hour of Day.
 - **Multi-type Support**: Handles 6 distinct post types simultaneously.
 - **High Performance**: Optimized aggregation engine handles 1000+ posts/sec.
 - **Resilience**: Automatic reconnection with exponential backoff.
@@ -28,7 +28,7 @@ graph TD
     SSE[SSE Stream] -->|Events| Core[packages/core]
     Core -->|Parsed Data| Aggregator[PostAggregator]
     Aggregator -->|Batched Updates| WebApp[apps/web]
-    WebApp -->|Render| Grid[PunchCardGrid]
+    WebApp -->|Render| Grid[WeeklyCalendarGraph]
 
     subgraph "packages/core"
         Client[SSEClient]
@@ -50,7 +50,7 @@ graph TD
   - `Zod Schemas`: Runtime validation for type safety.
 - **`apps/web`**: Astro application hosting the React visualization.
   - `useAccumulator`: Batches updates to prevent UI thrashing.
-  - `PunchCardGrid`: Responsive CSS Grid visualization.
+  - `WeeklyCalendarGraph`: Responsive CSS Grid visualization.
 
 ## 🛠 Getting Started
 

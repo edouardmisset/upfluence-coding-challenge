@@ -1,4 +1,4 @@
-import { PunchCardGrid } from './punch-card-grid'
+import { WeeklyCalendarGraph } from './weekly-calendar-graph'
 import {
   SOCIAL_MEDIA_TEXT_MAP,
   type SocialMedias,
@@ -11,15 +11,17 @@ export function SocialEventCard({
   weekdayHourlyCount,
 }: Props) {
   return (
-    <div className="social-event-card" data-social={socialMedia}>
-      <div className="social-event-header">
+    <article className="social-event-card" data-social={socialMedia}>
+      <header className="social-event-header">
         <h3 className="social-event-title">
           {SOCIAL_MEDIA_TEXT_MAP[socialMedia]}
         </h3>
-        <span className="social-event-count">{count}</span>
-      </div>
-      <PunchCardGrid weekdayHourlyCount={weekdayHourlyCount} />
-    </div>
+        <data className="social-event-count" value={count}>
+          {count}
+        </data>
+      </header>
+      <WeeklyCalendarGraph weekdayHourlyCount={weekdayHourlyCount} />
+    </article>
   )
 }
 
