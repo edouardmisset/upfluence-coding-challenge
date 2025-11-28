@@ -5,10 +5,11 @@ Server-Sent Events (SSE). Built with a modern monorepo architecture to
 demonstrate production-ready patterns.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
-![Astro](https://img.shields.io/badge/Astro-4.0-orange)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
+![Astro](https://img.shields.io/badge/Astro-5.0-orange)
 ![React](https://img.shields.io/badge/React-19-blue)
-![Vite](https://img.shields.io/badge/Vite-5.0-purple)
+![Vue](https://img.shields.io/badge/Vue-3-green)
+![Svelte](https://img.shields.io/badge/Svelte-5-orange)
 
 ## 🚀 Features
 
@@ -48,22 +49,22 @@ graph TD
   - `SSEClient`: Manages connection stability.
   - `PostAggregator`: O(1) data structure for efficient updates.
   - `Zod Schemas`: Runtime validation for type safety.
-- **`apps/web`**: Astro application hosting the React visualization.
-  - `useAccumulator`: Batches updates to prevent UI thrashing.
-  - `WeeklyCalendarGraph`: Responsive CSS Grid visualization.
+- **`apps/web`**: Astro application hosting React, Vue, and Svelte visualizations.
+  - `useAccumulator`: React hook that batches updates to prevent UI thrashing.
+  - `WeeklyCalendarGraph`: Responsive CSS Grid visualization (implemented in all three frameworks).
 
 ## 🛠 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm 8+ (recommended)
+- Node.js 22+
+- pnpm 10+
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/edouardmisset/upfluence-challenge.git
+git clone https://github.com/edouardmisset/upfluence-coding-challenge.git
 
 # Install dependencies
 pnpm install
@@ -91,14 +92,14 @@ pnpm format
 
 ## 💡 Technical Decisions
 
-| Decision     | Alternative   | Rationale                                                                                    |
-| ------------ | ------------- | -------------------------------------------------------------------------------------------- |
-| **Monorepo** | Single Repo   | Separates core logic from UI, enabling future multi-framework implementations (e.g., Ember). |
-| **pnpm**     | npm/yarn      | Faster installation and efficient disk usage via content-addressable storage.                |
-| **Zod**      | Manual Checks | Provides runtime type safety and automatic TypeScript type inference.                        |
-| **Astro**    | Vite/Next.js  | Lightweight container for multiple framework integrations (React, Vue, etc.).                |
-| **React**    | Ember/Vue     | Chosen for rapid prototyping speed.                                                          |
-| **CSS Grid** | Canvas        | Sufficient performance for 7x24 grid while remaining accessible and easy to style.           |
+| Decision             | Alternative   | Rationale                                                                          |
+| -------------------- | ------------- | ---------------------------------------------------------------------------------- |
+| **Monorepo**         | Single Repo   | Separates core logic from UI, enabling multi-framework implementations.            |
+| **pnpm**             | npm/yarn      | Faster installation and efficient disk usage via content-addressable storage.      |
+| **Zod**              | Manual Checks | Provides runtime type safety and automatic TypeScript type inference.              |
+| **Astro**            | Vite/Next.js  | Lightweight container for multiple framework integrations (React, Vue, Svelte).    |
+| **React/Vue/Svelte** | Ember         | Three frameworks implemented to demonstrate the architecture's flexibility.        |
+| **CSS Grid**         | Canvas        | Sufficient performance for 7x24 grid while remaining accessible and easy to style. |
 
 ### Code Conventions
 
@@ -112,7 +113,7 @@ pnpm format
 
 ## 🔮 Future Improvements
 
-- **Ember Implementation**: Add `apps/ember-viz` to demonstrate framework versatility.
+- **Ember Implementation**: Add an Ember.js visualization to demonstrate additional framework versatility (React, Vue, and Svelte are already implemented).
 - **Data Persistence**: Save aggregated state to `localStorage` to survive refreshes.
 - **Dark Mode**: Fully implemented theming support.
 
