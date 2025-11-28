@@ -13,22 +13,6 @@ declare const ContentSchema: z.ZodObject<{
 type Content = z.infer<typeof ContentSchema>;
 type Timestamp = Content['timestamp'];
 
-/**
- * Returns the UTC day of the week for a given timestamp.
- *
- * NOTE: 0 = Sunday, 1 = Monday, ...
- *
- * @param timestamp - The timestamp in seconds.
- * @returns The day of the week (0 = Sunday, 1 = Monday, ...).
- */
-declare function getDayOfWeek(timestamp: Timestamp): number;
-/**
- * Returns the UTC hour of the day for a given timestamp.
- * @param timestamp - The timestamp in seconds.
- * @returns The hour of the day (0-23).
- */
-declare function getHourOfDay(timestamp: Timestamp): number;
-
 /** Days of the week: [0 - 6] */
 type WeekDay = number;
 /** 24 hours: [0 - 23] */
@@ -47,21 +31,20 @@ declare class EventAccumulator {
     getAllTotals(): Totals;
 }
 
-declare const streamUrl = "https://stream.upfluence.co/stream";
-declare const refreshRateInMilliSeconds = 1000;
-type SSEOptions = {
-    onMessage?: (type: SocialMedias, timestamp: Timestamp) => void;
-    onError?: (error: Event) => void;
-    onOpen?: (event: Event) => void;
+declare const SOCIAL_MEDIAS: readonly ["tiktok_video", "instagram_media", "story", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream"];
+declare const SOCIAL_MEDIA_TEXT_MAP: {
+    readonly pin: "Pinterest";
+    readonly instagram_media: "Instagram";
+    readonly youtube_video: "YouTube";
+    readonly article: "Article";
+    readonly tweet: "Tweeter";
+    readonly facebook_status: "Facebook";
+    readonly twitch_stream: "Twitch";
+    readonly tiktok_video: "TikTok";
+    readonly story: "Story";
 };
-declare class SSEClient {
-    private eventSource;
-    private url;
-    private options;
-    constructor(url: string, options?: SSEOptions);
-    connect(): void;
-    disconnect(): void;
-}
+declare const DAYS: readonly ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+declare const HOURS: readonly [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
 type StreamState = {
     isConnected: boolean;
@@ -90,6 +73,39 @@ declare class StreamService {
     private notifyListeners;
 }
 
+declare const streamUrl = "https://stream.upfluence.co/stream";
+declare const refreshRateInMilliSeconds = 1000;
+type SSEOptions = {
+    onMessage?: (type: SocialMedias, timestamp: Timestamp) => void;
+    onError?: (error: Event) => void;
+    onOpen?: (event: Event) => void;
+};
+declare class SSEClient {
+    private eventSource;
+    private url;
+    private options;
+    constructor(url: string, options?: SSEOptions);
+    connect(): void;
+    disconnect(): void;
+}
+
+/**
+ * Calculate the intensity level for a punch card cell based on the count and
+ * the maximum count.
+ *
+ * @param {number} count - The number of events for the given hour and day.
+ * @param {number} maxCount - The maximum number of events across all hours and
+ * days.
+ * @returns {number} The intensity level (0-5), where 0 means no events and 5 is
+ * the highest intensity.
+ */
+declare function calculateIntensity({ count, maxCount, }: {
+    count: number;
+    maxCount: number;
+}): number;
+
+declare function calculateMaxHourlyCount(weekdayHourlyCount: WeekdayHourlyCount): number;
+
 declare class PerformanceTracker {
     private lastTime;
     private previousTotal;
@@ -101,19 +117,20 @@ declare class PerformanceTracker {
     private roundToPrecision;
 }
 
-declare const SOCIAL_MEDIAS: readonly ["tiktok_video", "instagram_media", "story", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream"];
-declare const SOCIAL_MEDIA_TEXT_MAP: {
-    readonly pin: "Pinterest";
-    readonly instagram_media: "Instagram";
-    readonly youtube_video: "YouTube";
-    readonly article: "Article";
-    readonly tweet: "Tweeter";
-    readonly facebook_status: "Facebook";
-    readonly twitch_stream: "Twitch";
-    readonly tiktok_video: "TikTok";
-    readonly story: "Story";
-};
-declare const DAYS: readonly ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-declare const HOURS: readonly [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+/**
+ * Returns the UTC day of the week for a given timestamp.
+ *
+ * NOTE: 0 = Sunday, 1 = Monday, ...
+ *
+ * @param timestamp - The timestamp in seconds.
+ * @returns The day of the week (0 = Sunday, 1 = Monday, ...).
+ */
+declare function getDayOfWeek(timestamp: Timestamp): number;
+/**
+ * Returns the UTC hour of the day for a given timestamp.
+ * @param timestamp - The timestamp in seconds.
+ * @returns The hour of the day (0-23).
+ */
+declare function getHourOfDay(timestamp: Timestamp): number;
 
-export { type Accumulator, type Content, ContentSchema, DAYS, EventAccumulator, HOURS, PerformanceTracker, SOCIAL_MEDIAS, SOCIAL_MEDIA_TEXT_MAP, SSEClient, type SSEOptions, type SocialMedias, SocialMediasSchema, StreamService, type StreamServiceListener, type StreamState, type Timestamp, type Totals, type WeekdayHourlyCount, getDayOfWeek, getHourOfDay, refreshRateInMilliSeconds, streamUrl };
+export { type Accumulator, type Content, ContentSchema, DAYS, EventAccumulator, HOURS, PerformanceTracker, SOCIAL_MEDIAS, SOCIAL_MEDIA_TEXT_MAP, SSEClient, type SSEOptions, type SocialMedias, SocialMediasSchema, StreamService, type StreamServiceListener, type StreamState, type Timestamp, type Totals, type WeekdayHourlyCount, calculateIntensity, calculateMaxHourlyCount, getDayOfWeek, getHourOfDay, refreshRateInMilliSeconds, streamUrl };

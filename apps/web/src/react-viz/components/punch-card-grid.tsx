@@ -1,15 +1,14 @@
-import { DAYS, HOURS, type WeekdayHourlyCount } from '@upfluence/core'
+import {
+  DAYS,
+  HOURS,
+  type WeekdayHourlyCount,
+  calculateIntensity,
+  calculateMaxHourlyCount,
+} from '@upfluence/core'
 import React from 'react'
 
-type Props = {
-  weekdayHourlyCount: WeekdayHourlyCount
-}
-
 export function PunchCardGrid({ weekdayHourlyCount }: Props) {
-  const maxCount =
-    Math.max(
-      ...Object.values(weekdayHourlyCount).flatMap((day) => Object.values(day)),
-    ) || 1
+  const maxCount = calculateMaxHourlyCount(weekdayHourlyCount)
   return (
     <div className="punch-card-grid">
       {/* Header Row: Hours */}
@@ -26,8 +25,8 @@ export function PunchCardGrid({ weekdayHourlyCount }: Props) {
           <div className="punch-card-label">{dayName}</div>
           {HOURS.map((hour) => {
             const count = weekdayHourlyCount[dayIndex]?.[hour] ?? 0
-            // Calculate intensity [0-5]
-            const intensity = 0 < count ? Math.ceil((count / maxCount) * 5) : 0
+
+            const intensity = calculateIntensity({ count, maxCount })
 
             return (
               <div
@@ -42,4 +41,8 @@ export function PunchCardGrid({ weekdayHourlyCount }: Props) {
       ))}
     </div>
   )
+}
+
+type Props = {
+  weekdayHourlyCount: WeekdayHourlyCount
 }

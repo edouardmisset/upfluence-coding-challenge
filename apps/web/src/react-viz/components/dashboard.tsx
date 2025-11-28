@@ -36,8 +36,8 @@ export function Dashboard() {
           <SocialEventCard
             key={type}
             socialMedia={type}
-            count={totals[type] || 0}
-            weekdayHourlyCount={accumulator[type] || {}}
+            count={totals[type] ?? 0}
+            weekdayHourlyCount={accumulator[type] ?? {}}
           />
         ))}
       </div>

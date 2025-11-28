@@ -1,5 +1,45 @@
-// src/validators/schemas.ts
-import { z } from "zod";
+// src/utils/time-utils.ts
+function getDayOfWeek(timestamp) {
+  return new Date(timestamp * 1e3).getUTCDay();
+}
+function getHourOfDay(timestamp) {
+  return new Date(timestamp * 1e3).getUTCHours();
+}
+
+// src/accumulator/event-accumulator.ts
+var EventAccumulator = class {
+  accumulator;
+  totals;
+  constructor() {
+    this.accumulator = {};
+    this.totals = {};
+  }
+  increment(postType, timestamp) {
+    const day = getDayOfWeek(timestamp);
+    const hour = getHourOfDay(timestamp);
+    if (!this.accumulator[postType]) {
+      this.accumulator[postType] = {};
+      this.totals[postType] = 0;
+    }
+    if (!this.accumulator[postType][day]) {
+      this.accumulator[postType][day] = {};
+    }
+    if (!this.accumulator[postType][day][hour]) {
+      this.accumulator[postType][day][hour] = 0;
+    }
+    this.accumulator[postType][day][hour]++;
+    this.totals[postType]++;
+  }
+  getData() {
+    return this.accumulator;
+  }
+  getTotal(postType) {
+    return this.totals[postType] || 0;
+  }
+  getAllTotals() {
+    return this.totals;
+  }
+};
 
 // src/constants.ts
 var SOCIAL_MEDIAS = [
@@ -53,54 +93,12 @@ var HOURS = [
 ];
 
 // src/validators/schemas.ts
+import { z } from "zod";
 var SocialMediasSchema = z.enum(SOCIAL_MEDIAS);
 var ContentSchema = z.object({
   /** Unix timestamp in seconds */
   timestamp: z.number()
 });
-
-// src/utils/time-utils.ts
-function getDayOfWeek(timestamp) {
-  return new Date(timestamp * 1e3).getUTCDay();
-}
-function getHourOfDay(timestamp) {
-  return new Date(timestamp * 1e3).getUTCHours();
-}
-
-// src/accumulator/event-accumulator.ts
-var EventAccumulator = class {
-  accumulator;
-  totals;
-  constructor() {
-    this.accumulator = {};
-    this.totals = {};
-  }
-  increment(postType, timestamp) {
-    const day = getDayOfWeek(timestamp);
-    const hour = getHourOfDay(timestamp);
-    if (!this.accumulator[postType]) {
-      this.accumulator[postType] = {};
-      this.totals[postType] = 0;
-    }
-    if (!this.accumulator[postType][day]) {
-      this.accumulator[postType][day] = {};
-    }
-    if (!this.accumulator[postType][day][hour]) {
-      this.accumulator[postType][day][hour] = 0;
-    }
-    this.accumulator[postType][day][hour]++;
-    this.totals[postType]++;
-  }
-  getData() {
-    return this.accumulator;
-  }
-  getTotal(postType) {
-    return this.totals[postType] || 0;
-  }
-  getAllTotals() {
-    return this.totals;
-  }
-};
 
 // src/stream/sse-client.ts
 var streamUrl = "https://stream.upfluence.co/stream";
@@ -262,6 +260,21 @@ var StreamService = class {
     this.listeners.forEach((listener) => listener(this.state));
   }
 };
+
+// src/utils/calculate-intensity.ts
+function calculateIntensity({
+  count,
+  maxCount
+}) {
+  return 0 < count ? Math.ceil(count / maxCount * 5) : 0;
+}
+
+// src/utils/calculate-max-hourly-count.ts
+function calculateMaxHourlyCount(weekdayHourlyCount) {
+  return Math.max(
+    ...Object.values(weekdayHourlyCount).flatMap((day) => Object.values(day))
+  ) || 1;
+}
 export {
   ContentSchema,
   DAYS,
@@ -273,6 +286,8 @@ export {
   SSEClient,
   SocialMediasSchema,
   StreamService,
+  calculateIntensity,
+  calculateMaxHourlyCount,
   getDayOfWeek,
   getHourOfDay,
   refreshRateInMilliSeconds,
