@@ -120,3 +120,9 @@ Edouard Misset
 ---
 
 _Built for the Upfluence Coding Challenge._
+
+## Disclaimer
+
+Some code was generated with the help of AI tools (GitHub Copilot) to accelerate
+development. All code has been reviewed and adjusted by the author to ensure
+quality and correctness.
