@@ -49,7 +49,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-size-adjust: 100%;
-  text-size-adjust: 100%;
   hanging-punctuation: first last;
   animation-timing-function: cubic-bezier(0, 0.3, 0.1, 1);
   transition-timing-function: cubic-bezier(0, 0.3, 0.1, 1);
@@ -130,54 +129,6 @@
 /* Set a size for SVG's without a width attribute */
 :where(svg):where(:not([width])) {
   inline-size: 5rem;
-}
-
-/* !!!!!!! THIS NEEDS TESTING !!!!! */
-:where(a) {
-  --a-color: hsl(235deg 100% 70%);
-
-  color: var(--a-color);
-  font-weight: 500;
-  text-decoration-skip-ink: auto;
-
-  /* Relatively sized thickness and offset */
-  text-decoration-thickness: max(0.08em, 1px);
-  text-underline-offset: 0.15em;
-
-  &:hover {
-    color: color-mix(in oklab, var(--a-color), white 10%);
-  }
-
-  &:visited {
-    color: color-mix(in oklab, var(--a-color), white 20%);
-  }
-}
-
-:where(input:user-valid) {
-  outline-offset: 2px;
-  outline: greenyellow solid 2px;
-}
-
-:where(input:user-invalid) {
-  outline-offset: 2px;
-  outline: tomato solid 2px;
-}
-
-:where(input:is(:-webkit-autofill, :autofill)) {
-  border: 2px solid darkorange;
-}
-
-/* Progressive enhancements */
-@supports (field-sizing: content) {
-  :where(textarea, select, input) {
-    field-sizing: content;
-  }
-}
-
-:where(input, button, textarea, select) {
-  letter-spacing: inherit;
-  word-spacing: inherit;
-  color: currentcolor;
 }
 
 :where(button, label, select, summary, [role='button'], [role='option']) {

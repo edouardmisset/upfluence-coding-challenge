@@ -4,6 +4,6 @@
 @import url('./src/base/starter.css') layer(base);
 @import url('./src/layout/dashboard.css') layer(layout);
 @import url('./src/components/connection-status.css') layer(components);
-@import url('./src/components/post-type-card.css') layer(components);
+@import url('./src/components/social-event-card.css') layer(components);
 @import url('./src/components/punch-card-grid.css') layer(components);
 @import url('./src/components/error-fallback.css') layer(components);

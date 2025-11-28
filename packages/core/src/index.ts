@@ -1,4 +1,4 @@
 export * from './validators/schemas'
 export * from './utils/time-utils'
-export * from './aggregator/post-aggregator'
+export * from './accumulator/post-accumulator'
 export * from './stream/sse-client'

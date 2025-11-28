@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="Upfluence Coding Challenge">
+  <main>
+    <div class="container">
+      <h1>Upfluence Coding Challenge</h1>
+      <p>
+        Real-time 3D visualization of social media events using Server-Sent
+        Events (SSE).
+      </p>
+      <a
+        href="/upfluence-coding-challenge/react-viz"
+        class="btn"
+        data-variant="react">React</a
+      >
+      <a
+        href="/upfluence-coding-challenge/vue-viz"
+        class="btn"
+        data-variant="vue">Vue</a
+      >
+      <a
+        href="/upfluence-coding-challenge/svelte-viz"
+        class="btn"
+        data-variant="svelte">Svelte</a
+      >
+      <a
+        href="/upfluence-coding-challenge/angular-viz"
+        class="btn"
+        data-variant="angular">Angular</a
+      >
+      <a
+        href="/upfluence-coding-challenge/ember-viz"
+        class="btn"
+        data-variant="ember">Ember</a
+      >
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :root {
+    --width-container: 65rem;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .container {
+    background: var(--bg-surface);
+    padding: var(--space-2xl);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0.25rem 0.75rem var(--color-shadow);
+    max-inline-size: var(--width-container);
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  h1 {
+    margin-block-end: var(--space-md);
+    color: var(--text-primary);
+  }
+
+  p {
+    margin-block-end: var(--space-xl);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .btn {
+    --button-color: var(--color-primary);
+
+    display: inline-block;
+    color: var(--text-inverse);
+    padding: var(--space-sm) 1.5rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    margin: 0.5rem;
+  }
+
+  .btn[data-variant='react'] {
+    --button-color: var(--color-react);
+  }
+
+  .btn[data-variant='vue'] {
+    --button-color: var(--color-vue);
+  }
+
+  .btn[data-variant='angular'] {
+    --button-color: var(--color-angular);
+  }
+
+  .btn[data-variant='svelte'] {
+    --button-color: var(--color-svelte);
+  }
+
+  .btn[data-variant='ember'] {
+    --button-color: var(--color-ember);
+  }
+
+  .btn {
+    background-color: var(--button-color);
+  }
+
+  .btn:hover {
+    background-color: hsl(from var(--button-color) h s calc(l + 10));
+  }
+</style>

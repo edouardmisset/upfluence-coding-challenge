@@ -1,15 +1,15 @@
 // src/validators/schemas.ts
 import { z } from "zod";
 var SOCIAL_MEDIAS = [
+  "tiktok_video",
   "instagram_media",
+  "story",
   "youtube_video",
   "pin",
   "tweet",
   "article",
   "facebook_status",
-  "twitch_stream",
-  "tiktok_video",
-  "story"
+  "twitch_stream"
 ];
 var SocialMediasSchema = z.enum(SOCIAL_MEDIAS);
 var ContentSchema = z.object({
@@ -25,8 +25,8 @@ function getHourOfDay(timestamp) {
   return new Date(timestamp * 1e3).getUTCHours();
 }
 
-// src/aggregator/post-aggregator.ts
-var PostAggregator = class {
+// src/accumulator/post-accumulator.ts
+var EventAccumulator = class {
   accumulator;
   totals;
   constructor() {
@@ -113,7 +113,7 @@ var SSEClient = class {
 };
 export {
   ContentSchema,
-  PostAggregator,
+  EventAccumulator,
   SOCIAL_MEDIAS,
   SSEClient,
   SocialMediasSchema,

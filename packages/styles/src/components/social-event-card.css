@@ -1,0 +1,67 @@
+.social-event-card {
+  border: 1px solid var(--color-gray-200);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.social-event-header {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: var(--space-md);
+  align-items: center;
+}
+
+.social-event-title {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.social-event-count {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
+  background: var(--bg-surface-hover);
+  padding-inline: var(--space-sm);
+  padding-block: var(--space-xs);
+  border-radius: var(--radius-md);
+  min-inline-size: 3ch;
+  box-sizing: content-box;
+  text-align: end;
+
+  &[data-social='tiktok_video'] {
+    color: var(--color-tiktok);
+  }
+
+  &[data-social='instagram_media'] {
+    color: var(--color-instagram);
+  }
+
+  &[data-social='story'] {
+    color: var(--color-story);
+  }
+
+  &[data-social='youtube_video'] {
+    color: var(--color-youtube);
+  }
+
+  &[data-social='pin'] {
+    color: var(--color-pinterest);
+  }
+
+  &[data-social='tweet'] {
+    color: var(--color-twitter);
+  }
+
+  &[data-social='article'] {
+    color: var(--color-article);
+  }
+
+  &[data-social='facebook_status'] {
+    color: var(--color-facebook);
+  }
+
+  &[data-social='twitch_stream'] {
+    color: var(--color-twitch);
+  }
+}

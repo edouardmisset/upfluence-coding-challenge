@@ -1,15 +1,15 @@
 import { z } from 'zod'
 
 export const SOCIAL_MEDIAS = [
+  'tiktok_video',
   'instagram_media',
+  'story',
   'youtube_video',
   'pin',
   'tweet',
   'article',
   'facebook_status',
   'twitch_stream',
-  'tiktok_video',
-  'story',
 ] as const
 
 export const SocialMediasSchema = z.enum(SOCIAL_MEDIAS)

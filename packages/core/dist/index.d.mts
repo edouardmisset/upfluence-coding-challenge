@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-declare const SOCIAL_MEDIAS: readonly ["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream", "tiktok_video", "story"];
-declare const SocialMediasSchema: z.ZodEnum<["instagram_media", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream", "tiktok_video", "story"]>;
+declare const SOCIAL_MEDIAS: readonly ["tiktok_video", "instagram_media", "story", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream"];
+declare const SocialMediasSchema: z.ZodEnum<["tiktok_video", "instagram_media", "story", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream"]>;
 type SocialMedias = z.infer<typeof SocialMediasSchema>;
 declare const ContentSchema: z.ZodObject<{
     /** Unix timestamp in seconds */
@@ -30,13 +30,15 @@ declare function getDayOfWeek(timestamp: Timestamp): number;
  */
 declare function getHourOfDay(timestamp: Timestamp): number;
 
-/** [0 - 6] */
+/** Days of the week: [0 - 6] */
 type WeekDay = number;
-/** [0 - 23] */
+/** 24 hours: [0 - 23] */
 type HourOfDay = number;
-type Accumulator = Record<SocialMedias, Record<WeekDay, Record<HourOfDay, number>>>;
+/** Mapping of day to hour to count, e.g., { 2: { 16: 3 } } */
+type WeekdayHourlyCount = Record<WeekDay, Record<HourOfDay, number>>;
+type Accumulator = Record<SocialMedias, WeekdayHourlyCount>;
 type Totals = Record<SocialMedias, number>;
-declare class PostAggregator {
+declare class EventAccumulator {
     private accumulator;
     private totals;
     constructor();
@@ -62,4 +64,4 @@ declare class SSEClient {
     disconnect(): void;
 }
 
-export { type Accumulator, type Content, ContentSchema, PostAggregator, SOCIAL_MEDIAS, SSEClient, type SSEOptions, type SocialMedias, SocialMediasSchema, type Timestamp, type Totals, getDayOfWeek, getHourOfDay, refreshRateInMilliSeconds, streamUrl };
+export { type Accumulator, type Content, ContentSchema, EventAccumulator, SOCIAL_MEDIAS, SSEClient, type SSEOptions, type SocialMedias, SocialMediasSchema, type Timestamp, type Totals, type WeekdayHourlyCount, getDayOfWeek, getHourOfDay, refreshRateInMilliSeconds, streamUrl };
