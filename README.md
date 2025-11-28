@@ -14,44 +14,65 @@ demonstrate production-ready patterns.
 ## 🚀 Features
 
 - **Real-time Visualization**: Updates instantly via SSE stream (<5s latency).
-- **3D Weekly Calendar Graph**: Visualizes posts by Day of Week × Hour of Day.
-- **Multi-type Support**: Handles 6 distinct post types simultaneously.
-- **High Performance**: Optimized aggregation engine handles 1000+ posts/sec.
+- **3D Weekly Calendar Graph**: Visualizes events by Day of Week × Hour of Day.
+- **Multi-type Support**: Handles 9 distinct event types simultaneously.
+- **High Performance**: Optimized aggregation engine handles 1000+ events/sec.
 - **Resilience**: Automatic reconnection with exponential backoff.
 - **Production Polish**: Error boundaries, loading states, and performance metrics.
 
 ## 🏗 Architecture
 
-The project uses a **Turborepo** monorepo structure to separate concerns and ensure scalability.
+The project is a Monorepo managed by Turborepo and pnpm. It is designed to
+strictly separate business logic from UI presentation, allowing the core logic
+to be written once and reused across multiple frontend frameworks (React, Vue,
+Svelte).
 
-```mermaid
-graph TD
-    SSE[SSE Stream] -->|Events| Core[packages/core]
-    Core -->|Parsed Data| Aggregator[PostAggregator]
-    Aggregator -->|Batched Updates| WebApp[apps/web]
-    WebApp -->|Render| Grid[WeeklyCalendarGraph]
+### Core Modules
 
-    subgraph "packages/core"
-        Client[SSEClient]
-        Aggregator
-        Validators[Zod Schemas]
-    end
+1. core (The Brain)
 
-    subgraph "apps/web"
-        Hooks[Custom Hooks]
-        Components[UI Components]
-    end
-```
+- **Purpose**: Contains all the "smart" code. It is completely
+  framework-agnostic (pure TypeScript).
+- **Key Components**:
+  - `SSEClient`: Manages the persistent connection to the Server-Sent Events
+    stream, handling reconnection automatically.
+  - `EventAccumulator`: An optimized in-memory data structure that aggregates
+    high-frequency data into buckets (Event Type → Day of Week → Hour of Day).
+  - `StreamService`: The orchestrator. It ties the client and accumulator
+    together, manages the application state, and exposes a subscription API for
+    the UI to listen to.
+  - `Zod Schemas`: Ensures all incoming data is validated at runtime before
+    being processed.
 
-### Key Components
+2. apps/web (The Presentation)
 
-- **`packages/core`**: Framework-agnostic business logic.
-  - `SSEClient`: Manages connection stability.
-  - `PostAggregator`: O(1) data structure for efficient updates.
-  - `Zod Schemas`: Runtime validation for type safety.
-- **`apps/web`**: Astro application hosting React, Vue, and Svelte visualizations.
-  - `useAccumulator`: React hook that batches updates to prevent UI thrashing.
-  - `WeeklyCalendarGraph`: Responsive CSS Grid visualization (implemented in all three frameworks).
+- **Purpose**: The user interface.
+- **Framework**: Astro is used as the "App Shell" or container.
+- **Integrations**: It hosts three separate implementations of the visualization
+  dashboard:
+  - React (src/react-viz)
+  - Vue (src/vue-viz)
+  - Svelte (src/svelte-viz)
+- **Pattern**: Each framework implementation consumes the exact same
+  `StreamService` from `packages/core`, proving the reusability of the logic.
+
+3. packages/styles (The Look)
+
+- **Purpose**: Shared design system.
+- **Tech**: Plain CSS with CSS Variables.
+- **Usage**: Ensures that the React, Vue, and Svelte versions look identical by
+  sharing the same CSS tokens and layout classes.
+
+### Data Flow
+
+1. **Ingest**: The `SSEClient` receives a raw event from the stream.
+2. **Validate**: The data is checked against `Zod` schemas.
+3. **Aggregate**: The `EventAccumulator` increments the counter for the specific
+  `[EventType][Day][Hour]` bucket. This happens in `O(1)` time.
+4. **Broadcast**: The `StreamService` notifies all subscribed UI components of
+the new state.
+5. **Render**: The `WeeklyCalendarGraph` component (in React/Vue/Svelte) updates
+   the CSS Grid to reflect the new event counts.
 
 ## 🛠 Getting Started
 
@@ -103,19 +124,29 @@ pnpm format
 
 ### Code Conventions
 
-- **File Naming**: All files use `kebab-case` (e.g., `post-aggregator.ts`, `post-type-card.tsx`) to ensure consistent behavior across case-sensitive (Linux) and case-insensitive (macOS/Windows) file systems.
+- **File Naming**: All files use `kebab-case` (e.g., `social-event-card.tsx`) to
+  ensure consistent behavior across case-sensitive (Linux) and case-insensitive
+  (macOS/Windows) file systems.
 
 ## ⚖️ Trade-offs
 
-- **Memory Usage**: The aggregator keeps all data in memory. For a production app running for days, I would implement a sliding window (e.g., keep only last 7 days) or persist to IndexedDB.
-- **Visualization**: A Canvas-based approach (like Visx or raw Canvas) would be more performant for massive datasets, but DOM nodes are sufficient for this specific grid size (168 cells per card).
-- **State Management**: Used React Context/Local State for simplicity. For a larger app, I would reach for Zustand or TanStack Query.
+- **Memory Usage**: The aggregator keeps all data in memory. For a production
+  app running for days, I would implement a sliding window (e.g., keep only last
+  7 days) or persist to IndexedDB.
+- **Visualization**: A Canvas-based approach (like Visx or raw Canvas) would be
+  more performant for massive datasets, but DOM nodes are sufficient for this
+  specific grid size (168 cells per card).
+- **State Management**: Used React Context/Local State for simplicity. For a
+  larger app, I would reach for Zustand or TanStack Query.
 
 ## 🔮 Future Improvements
 
-- **Ember Implementation**: Add an Ember.js visualization to demonstrate additional framework versatility (React, Vue, and Svelte are already implemented).
-- **Data Persistence**: Save aggregated state to `localStorage` to survive refreshes.
-- **Dark Mode**: Fully implemented theming support.
+- **Ember Implementation**: Add an Ember.js visualization to demonstrate
+  additional framework versatility (React, Vue, and Svelte are already
+  implemented).
+- **Data Persistence**: Save aggregated state to `localStorage` to survive
+  refreshes.
+- **Dark Mode**: Dark theming toggle.
 
 ## 👤 Author
 
