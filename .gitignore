@@ -6,3 +6,4 @@ playwright-report/
 dist/
 .astro/
 DS_Store
+.cspellcache

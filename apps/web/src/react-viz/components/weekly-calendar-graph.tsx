@@ -7,7 +7,9 @@ import {
 } from '@upfluence/core'
 import { memo } from 'react'
 
-export function WeeklyCalendarGraph({ weekdayHourlyCount }: WeeklyCalendarGraphProps) {
+export function WeeklyCalendarGraph({
+  weekdayHourlyCount,
+}: WeeklyCalendarGraphProps) {
   const maxCount = calculateMaxHourlyCount(weekdayHourlyCount)
   return (
     <div
@@ -44,8 +46,6 @@ const HoursHeader = memo(() => (
     ))}
   </>
 ))
-
-
 
 const DayRow = memo(
   ({ dayName, dayIndex, weekdayHourlyCount, maxCount }: DayRowProps) => (

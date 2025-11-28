@@ -11,7 +11,7 @@
     "validate": "pnpm check && turbo run build test:e2e",
     "knip": "knip",
     "lint:style": "stylelint --cache --fix \"**/*.css\"",
-    "lint:spell": "cspell \"**/*\"",
+    "lint:spell": "cspell --cache \"**/*\"",
     "format": "prettier --cache --write \"**/*.{ts,tsx,md,html,js,json,css}\"",
     "test": "turbo run test"
   },
