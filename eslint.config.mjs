@@ -2,9 +2,18 @@ import { defineConfig } from 'eslint/config'
 import js from '@eslint/js'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
 
 export default defineConfig([
-  { ignores: ['**/dist', '**/node_modules', '**/coverage'] },
+  {
+    ignores: [
+      '**/dist',
+      '**/node_modules',
+      '**/coverage',
+      '**/.astro',
+      '**/env.d.ts',
+    ],
+  },
   {
     languageOptions: {
       parserOptions: {
@@ -14,6 +23,7 @@ export default defineConfig([
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  jsxA11y.flatConfigs.recommended,
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {

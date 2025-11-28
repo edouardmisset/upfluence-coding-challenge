@@ -10,6 +10,9 @@ export default defineConfig({
     resolve: {
       preserveSymlinks: true,
     },
+    optimizeDeps: {
+      exclude: ['@upfluence/core'],
+    },
     server: {
       watch: {
         ignored: ['!**/node_modules/@upfluence/**']

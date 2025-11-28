@@ -8,12 +8,13 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check"
+    "type-check": "astro check",
+    "lint": "eslint .",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/react": "^4.4.2",
-    "@edouardmisset/math": "npm:@jsr/edouardmisset__math@^5.0.0",
     "@upfluence/core": "workspace:*",
     "@upfluence/styles": "workspace:*",
     "astro": "^5.16.2",
@@ -23,8 +24,9 @@
     "typescript": "~5.9.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@playwright/test": "^1.57.0",
     "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
-    "vite": "^7.2.4"
+    "@types/react-dom": "^19.2.3"
   }
 }
