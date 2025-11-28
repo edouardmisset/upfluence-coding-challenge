@@ -31,5 +31,8 @@
   "packageManager": "pnpm@10.23.0",
   "dependencies": {
     "@edouardmisset/math": "npm:@jsr/edouardmisset__math@^5.0.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }
