@@ -5,9 +5,6 @@ import {
   type Timestamp,
 } from '../validators/schemas'
 
-export const streamUrl = 'https://stream.upfluence.co/stream'
-export const refreshRateInMilliSeconds = 1_000
-
 export type SSEOptions = {
   onMessage?: (type: SocialMedias, timestamp: Timestamp) => void
   onError?: (error: Event) => void

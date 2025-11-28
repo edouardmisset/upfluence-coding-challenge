@@ -91,6 +91,44 @@ var HOURS = [
   22,
   23
 ];
+var STREAM_URL = "https://stream.upfluence.co/stream";
+var REFRESH_RATE_MILLISECONDS = 1e3;
+
+// ../../node_modules/.pnpm/@jsr+edouardmisset__function@5.0.0/node_modules/@jsr/edouardmisset__function/get-env.js
+import process from "process";
+
+// ../../node_modules/.pnpm/@jsr+edouardmisset__math@5.0.0/node_modules/@jsr/edouardmisset__math/round-to-precision.js
+function roundToPrecision(decimalNumber, precision = 0) {
+  return Math.round(decimalNumber * 10 ** precision) / 10 ** precision;
+}
+
+// src/utils/performance-tracker.ts
+var PerformanceTracker = class {
+  lastTime = 0;
+  previousTotal = 0;
+  rate = 0;
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.lastTime = Date.now();
+    this.previousTotal = 0;
+    this.rate = 0;
+  }
+  update(currentTotal) {
+    const now = Date.now();
+    const timeDifferenceInSeconds = (now - this.lastTime) / 1e3;
+    if (timeDifferenceInSeconds > 0) {
+      const countDiff = currentTotal - this.previousTotal;
+      this.rate = roundToPrecision(countDiff / timeDifferenceInSeconds, 1);
+    }
+    this.previousTotal = currentTotal;
+    this.lastTime = now;
+  }
+  getRate() {
+    return this.rate;
+  }
+};
 
 // src/validators/schemas.ts
 import { z } from "zod";
@@ -101,8 +139,6 @@ var ContentSchema = z.object({
 });
 
 // src/stream/sse-client.ts
-var streamUrl = "https://stream.upfluence.co/stream";
-var refreshRateInMilliSeconds = 1e3;
 var SSEClient = class {
   eventSource = null;
   url;
@@ -149,42 +185,6 @@ var SSEClient = class {
       this.eventSource.close();
       this.eventSource = null;
     }
-  }
-};
-
-// ../../node_modules/.pnpm/@jsr+edouardmisset__function@5.0.0/node_modules/@jsr/edouardmisset__function/get-env.js
-import process from "process";
-
-// ../../node_modules/.pnpm/@jsr+edouardmisset__math@5.0.0/node_modules/@jsr/edouardmisset__math/round-to-precision.js
-function roundToPrecision(decimalNumber, precision = 0) {
-  return Math.round(decimalNumber * 10 ** precision) / 10 ** precision;
-}
-
-// src/utils/performance-tracker.ts
-var PerformanceTracker = class {
-  lastTime = 0;
-  previousTotal = 0;
-  rate = 0;
-  constructor() {
-    this.reset();
-  }
-  reset() {
-    this.lastTime = Date.now();
-    this.previousTotal = 0;
-    this.rate = 0;
-  }
-  update(currentTotal) {
-    const now = Date.now();
-    const timeDifferenceInSeconds = (now - this.lastTime) / 1e3;
-    if (timeDifferenceInSeconds > 0) {
-      const countDiff = currentTotal - this.previousTotal;
-      this.rate = roundToPrecision(countDiff / timeDifferenceInSeconds, 1);
-    }
-    this.previousTotal = currentTotal;
-    this.lastTime = now;
-  }
-  getRate() {
-    return this.rate;
   }
 };
 
@@ -239,7 +239,7 @@ var StreamService = class {
     if (this.updateInterval) return;
     this.updateInterval = setInterval(() => {
       this.updateState();
-    }, refreshRateInMilliSeconds);
+    }, REFRESH_RATE_MILLISECONDS);
   }
   stopUpdateLoop() {
     if (this.updateInterval) {
@@ -286,15 +286,15 @@ export {
   EventAccumulator,
   HOURS,
   PerformanceTracker,
+  REFRESH_RATE_MILLISECONDS,
   SOCIAL_MEDIAS,
   SOCIAL_MEDIA_TEXT_MAP,
   SSEClient,
+  STREAM_URL,
   SocialMediasSchema,
   StreamService,
   calculateIntensity,
   calculateMaxHourlyCount,
   getDayOfWeek,
-  getHourOfDay,
-  refreshRateInMilliSeconds,
-  streamUrl
+  getHourOfDay
 };

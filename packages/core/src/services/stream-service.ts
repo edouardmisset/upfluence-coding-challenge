@@ -1,4 +1,4 @@
-import { SSEClient, refreshRateInMilliSeconds } from '../stream/sse-client'
+import { REFRESH_RATE_MILLISECONDS } from '../constants'
 import {
   EventAccumulator,
   type Accumulator,
@@ -6,6 +6,7 @@ import {
 } from '../accumulator/event-accumulator'
 import { PerformanceTracker } from '../utils/performance-tracker'
 import { SocialMedias, type Timestamp } from '../validators/schemas'
+import { SSEClient } from '../stream/sse-client'
 
 export type StreamState = {
   isConnected: boolean
@@ -77,7 +78,7 @@ export class StreamService {
 
     this.updateInterval = setInterval(() => {
       this.updateState()
-    }, refreshRateInMilliSeconds)
+    }, REFRESH_RATE_MILLISECONDS)
   }
 
   private stopUpdateLoop() {

@@ -46,6 +46,8 @@ declare const SOCIAL_MEDIA_TEXT_MAP: {
 };
 declare const DAYS: readonly ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 declare const HOURS: readonly [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+declare const STREAM_URL = "https://stream.upfluence.co/stream";
+declare const REFRESH_RATE_MILLISECONDS = 1000;
 
 type StreamState = {
     isConnected: boolean;
@@ -74,8 +76,6 @@ declare class StreamService {
     private notifyListeners;
 }
 
-declare const streamUrl = "https://stream.upfluence.co/stream";
-declare const refreshRateInMilliSeconds = 1000;
 type SSEOptions = {
     onMessage?: (type: SocialMedias, timestamp: Timestamp) => void;
     onError?: (error: Event) => void;
@@ -142,4 +142,4 @@ declare function getDayOfWeek(timestamp: Timestamp): number;
  */
 declare function getHourOfDay(timestamp: Timestamp): number;
 
-export { type Accumulator, type Content, ContentSchema, DAYS, EventAccumulator, HOURS, PerformanceTracker, SOCIAL_MEDIAS, SOCIAL_MEDIA_TEXT_MAP, SSEClient, type SSEOptions, type SocialMedias, SocialMediasSchema, StreamService, type StreamServiceListener, type StreamState, type Timestamp, type Totals, type WeekdayHourlyCount, calculateIntensity, calculateMaxHourlyCount, getDayOfWeek, getHourOfDay, refreshRateInMilliSeconds, streamUrl };
+export { type Accumulator, type Content, ContentSchema, DAYS, EventAccumulator, HOURS, PerformanceTracker, REFRESH_RATE_MILLISECONDS, SOCIAL_MEDIAS, SOCIAL_MEDIA_TEXT_MAP, SSEClient, type SSEOptions, STREAM_URL, type SocialMedias, SocialMediasSchema, StreamService, type StreamServiceListener, type StreamState, type Timestamp, type Totals, type WeekdayHourlyCount, calculateIntensity, calculateMaxHourlyCount, getDayOfWeek, getHourOfDay };
