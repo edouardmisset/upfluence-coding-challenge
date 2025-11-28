@@ -10,11 +10,13 @@ This project is a **Monorepo** managed with **Turbo** and **pnpm**.
 ### Structure
 
 - **`apps/web`**: The frontend application.
-  - **Framework**: **Astro** (App Shell) + **React** (Interactive Viz).
+  - **Framework**: **Astro** (App Shell) + **React**, **Vue**, **Svelte** (Interactive Viz).
   - **Path**: `apps/web/`
   - **Key Files**:
     - `src/pages/index.astro`: Main entry point.
     - `src/react-viz/`: React components and hooks.
+    - `src/svelte-viz/`: Svelte components and state.
+    - `src/vue-viz/`: Vue components and composables.
 - **`packages/core`**: Pure TypeScript business logic.
   - **Purpose**: Handles SSE streaming, data aggregation, and validation.
   - **Path**: `packages/core/`
@@ -37,6 +39,7 @@ This project is a **Monorepo** managed with **Turbo** and **pnpm**.
 - **Type Check**: `pnpm type-check`.
 - **Lint**: `pnpm lint`.
 - **Full Check**: `pnpm check` (Format, Lint, Type-check, Test).
+- **Benchmark**: `pnpm benchmark` (Runs performance benchmarks).
 
 ## Coding Guidelines
 
