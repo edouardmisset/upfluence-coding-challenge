@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { WeeklyCalendarGraph } from './weekly-calendar-graph'
 import {
   SOCIAL_MEDIA_TEXT_MAP,
@@ -5,12 +6,8 @@ import {
   type WeekdayHourlyCount,
 } from '@upfluence/core'
 
-export function SocialEventCard({
-  socialMedia,
-  count,
-  weekdayHourlyCount,
-}: Props) {
-  return (
+export const SocialEventCard = memo(
+  ({ socialMedia, count, weekdayHourlyCount }: Props) => (
     <article className="social-event-card" data-social={socialMedia}>
       <header className="social-event-header">
         <h3 className="social-event-title">
@@ -22,8 +19,8 @@ export function SocialEventCard({
       </header>
       <WeeklyCalendarGraph weekdayHourlyCount={weekdayHourlyCount} />
     </article>
-  )
-}
+  ),
+)
 
 type Props = {
   socialMedia: SocialMedias

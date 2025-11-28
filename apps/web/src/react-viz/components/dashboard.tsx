@@ -32,12 +32,12 @@ export function Dashboard() {
       </header>
 
       <div className="dashboard-grid">
-        {SOCIAL_MEDIAS.map((type) => (
+        {SOCIAL_MEDIAS.map((socialMedia) => (
           <SocialEventCard
-            key={type}
-            socialMedia={type}
-            count={totals[type] ?? 0}
-            weekdayHourlyCount={accumulator[type] ?? {}}
+            key={socialMedia}
+            socialMedia={socialMedia}
+            count={totals[socialMedia] ?? 0}
+            weekdayHourlyCount={accumulator[socialMedia] ?? {}}
           />
         ))}
       </div>

@@ -5,9 +5,9 @@ import {
   calculateIntensity,
   calculateMaxHourlyCount,
 } from '@upfluence/core'
-import React from 'react'
+import { memo } from 'react'
 
-export function WeeklyCalendarGraph({ weekdayHourlyCount }: Props) {
+export function WeeklyCalendarGraph({ weekdayHourlyCount }: WeeklyCalendarGraphProps) {
   const maxCount = calculateMaxHourlyCount(weekdayHourlyCount)
   return (
     <div
@@ -15,41 +15,80 @@ export function WeeklyCalendarGraph({ weekdayHourlyCount }: Props) {
       role="img"
       aria-label="Weekly calendar graph of events by day and hour"
     >
-      {/* Header Row: Hours */}
-      <div />
-      {HOURS.map((hour) => (
-        <time
-          dateTime={`${hour}:00`}
-          key={hour}
-          className="weekly-calendar-graph-label"
-        >
-          {hour}
-        </time>
-      ))}
+      <HoursHeader />
 
-      {/* Rows: Days */}
       {DAYS.map((dayName, dayIndex) => (
-        <React.Fragment key={dayName}>
-          <time className="weekly-calendar-graph-label">{dayName}</time>
-          {HOURS.map((hour) => {
-            const count = weekdayHourlyCount[dayIndex]?.[hour] ?? 0
-
-            const intensity = calculateIntensity({ count, maxCount })
-
-            return (
-              <i
-                key={hour}
-                className={`weekly-calendar-graph-cell intensity-${intensity}`}
-                title={`${dayName} ${hour}:00-${hour}:59 - ${count} events`}
-              />
-            )
-          })}
-        </React.Fragment>
+        <DayRow
+          key={dayName}
+          dayName={dayName}
+          dayIndex={dayIndex}
+          weekdayHourlyCount={weekdayHourlyCount}
+          maxCount={maxCount}
+        />
       ))}
     </div>
   )
 }
 
-type Props = {
+const HoursHeader = memo(() => (
+  <>
+    <div />
+    {HOURS.map((hour) => (
+      <time
+        dateTime={`${hour}:00`}
+        key={hour}
+        className="weekly-calendar-graph-label"
+      >
+        {hour}
+      </time>
+    ))}
+  </>
+))
+
+
+
+const DayRow = memo(
+  ({ dayName, dayIndex, weekdayHourlyCount, maxCount }: DayRowProps) => (
+    <>
+      <time className="weekly-calendar-graph-label">{dayName}</time>
+      {HOURS.map((hour) => (
+        <HourCell
+          key={hour}
+          hour={hour}
+          dayName={dayName}
+          count={weekdayHourlyCount[dayIndex]?.[hour] ?? 0}
+          maxCount={maxCount}
+        />
+      ))}
+    </>
+  ),
+)
+
+const HourCell = memo(({ hour, dayName, count, maxCount }: HourCellProps) => {
+  const intensity = calculateIntensity({ count, maxCount })
+
+  return (
+    <i
+      className={`weekly-calendar-graph-cell intensity-${intensity}`}
+      title={`${dayName} ${hour}:00-${hour}:59 - ${count} events`}
+    />
+  )
+})
+
+type DayRowProps = {
+  dayName: string
+  dayIndex: number
+  weekdayHourlyCount: WeekdayHourlyCount
+  maxCount: number
+}
+
+type HourCellProps = {
+  hour: number
+  dayName: string
+  count: number
+  maxCount: number
+}
+
+type WeeklyCalendarGraphProps = {
   weekdayHourlyCount: WeekdayHourlyCount
 }
