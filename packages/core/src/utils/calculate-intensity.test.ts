@@ -33,7 +33,7 @@ describe('calculateIntensity', () => {
       maxCount: 100,
       expected: 4,
       desc: 'returns 4 for count=80, maxCount=100 (intermediate intensity)',
-    }
+    },
   ])('should $desc', ({ count, maxCount, expected }) => {
     expect(calculateIntensity({ count, maxCount })).toBe(expected)
   })

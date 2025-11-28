@@ -12,4 +12,5 @@ export const ContentSchema = z.object({
 
 export type Content = z.infer<typeof ContentSchema>
 
+/** Unix timestamp in seconds */
 export type Timestamp = Content['timestamp']

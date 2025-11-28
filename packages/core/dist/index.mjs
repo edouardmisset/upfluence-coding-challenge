@@ -46,23 +46,23 @@ var SOCIAL_MEDIAS = [
   "tiktok_video",
   "instagram_media",
   "story",
+  "twitch_stream",
   "youtube_video",
   "pin",
-  "tweet",
   "article",
-  "facebook_status",
-  "twitch_stream"
+  "tweet",
+  "facebook_status"
 ];
 var SOCIAL_MEDIA_TEXT_MAP = {
-  pin: "Pinterest",
-  instagram_media: "Instagram",
-  youtube_video: "YouTube",
-  article: "Article",
-  tweet: "Tweeter",
-  facebook_status: "Facebook",
-  twitch_stream: "Twitch",
   tiktok_video: "TikTok",
-  story: "Story"
+  instagram_media: "Instagram",
+  story: "Story",
+  twitch_stream: "Twitch",
+  youtube_video: "YouTube",
+  pin: "Pinterest",
+  article: "Article",
+  tweet: "Twitter",
+  facebook_status: "Facebook"
 };
 var DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 var HOURS = [

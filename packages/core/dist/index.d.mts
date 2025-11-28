@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-declare const SocialMediasSchema: z.ZodEnum<["tiktok_video", "instagram_media", "story", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream"]>;
+declare const SocialMediasSchema: z.ZodEnum<["tiktok_video", "instagram_media", "story", "twitch_stream", "youtube_video", "pin", "article", "tweet", "facebook_status"]>;
 type SocialMedias = z.infer<typeof SocialMediasSchema>;
 declare const ContentSchema: z.ZodObject<{
     /** Unix timestamp in seconds */
@@ -11,6 +11,7 @@ declare const ContentSchema: z.ZodObject<{
     timestamp: number;
 }>;
 type Content = z.infer<typeof ContentSchema>;
+/** Unix timestamp in seconds */
 type Timestamp = Content['timestamp'];
 
 /** Days of the week: [0 - 6] */
@@ -31,17 +32,17 @@ declare class EventAccumulator {
     getAllTotals(): Totals;
 }
 
-declare const SOCIAL_MEDIAS: readonly ["tiktok_video", "instagram_media", "story", "youtube_video", "pin", "tweet", "article", "facebook_status", "twitch_stream"];
+declare const SOCIAL_MEDIAS: readonly ["tiktok_video", "instagram_media", "story", "twitch_stream", "youtube_video", "pin", "article", "tweet", "facebook_status"];
 declare const SOCIAL_MEDIA_TEXT_MAP: {
-    readonly pin: "Pinterest";
-    readonly instagram_media: "Instagram";
-    readonly youtube_video: "YouTube";
-    readonly article: "Article";
-    readonly tweet: "Tweeter";
-    readonly facebook_status: "Facebook";
-    readonly twitch_stream: "Twitch";
     readonly tiktok_video: "TikTok";
+    readonly instagram_media: "Instagram";
     readonly story: "Story";
+    readonly twitch_stream: "Twitch";
+    readonly youtube_video: "YouTube";
+    readonly pin: "Pinterest";
+    readonly article: "Article";
+    readonly tweet: "Twitter";
+    readonly facebook_status: "Facebook";
 };
 declare const DAYS: readonly ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 declare const HOURS: readonly [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
