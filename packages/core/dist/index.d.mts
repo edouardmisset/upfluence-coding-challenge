@@ -27,15 +27,12 @@ type HourOfDay = number;
 type WeekdayHourlyCount = Record<WeekDay, Record<HourOfDay, number>>;
 type Accumulator = Record<SocialMedias, WeekdayHourlyCount>;
 type Totals = Record<SocialMedias, number>;
-declare class EventAccumulator {
-    private accumulator;
-    private totals;
-    constructor();
-    increment(postType: SocialMedias, timestamp: Timestamp): void;
-    getData(): Accumulator;
-    getTotal(postType: SocialMedias): number;
-    getAllTotals(): Totals;
-}
+declare const createEventAccumulator: () => {
+    increment: (postType: SocialMedias, timestamp: Timestamp) => void;
+    getData: () => Accumulator;
+    getTotal: (postType: SocialMedias) => number;
+    getAllTotals: () => Totals;
+};
 
 declare const SOCIAL_MEDIAS: readonly ["tiktok_video", "instagram_media", "story", "twitch_stream", "youtube_video", "pin", "article", "tweet", "facebook_status"];
 declare const SOCIAL_MEDIA_TEXT_MAP: {
@@ -62,38 +59,22 @@ type StreamState = {
     totalEvents: number;
 };
 type StreamServiceListener = (state: StreamState) => void;
-declare class StreamService {
-    private client;
-    private accumulator;
-    private performanceTracker;
-    private listeners;
-    private state;
-    private updateInterval;
-    constructor(url: string);
-    connect(): void;
-    disconnect(): void;
-    subscribe(listener: StreamServiceListener): () => void;
-    private handleConnectionChange;
-    private handleMessage;
-    private startUpdateLoop;
-    private stopUpdateLoop;
-    private updateState;
-    private notifyListeners;
-}
+declare const createStreamService: (url: string) => {
+    connect: () => void;
+    disconnect: () => void;
+    subscribe: (listener: StreamServiceListener) => (() => void);
+};
+type StreamService = ReturnType<typeof createStreamService>;
 
 type SSEOptions = {
     onMessage?: (type: SocialMedias, timestamp: Timestamp) => void;
     onError?: (error: Event) => void;
     onOpen?: (event: Event) => void;
 };
-declare class SSEClient {
-    private eventSource;
-    private url;
-    private options;
-    constructor(url: string, options?: SSEOptions);
-    connect(): void;
-    disconnect(): void;
-}
+declare const createSSEClient: (url: string, options?: SSEOptions) => {
+    connect: () => void;
+    disconnect: () => void;
+};
 
 /**
  * Calculate the intensity level for a punch card cell based on the count and
@@ -121,15 +102,11 @@ declare function calculateIntensity({ count, maxCount, }: {
  */
 declare function calculateMaxHourlyCount(weekdayHourlyCount: WeekdayHourlyCount): number;
 
-declare class PerformanceTracker {
-    private lastTime;
-    private previousTotal;
-    private rate;
-    constructor();
-    reset(): void;
-    update(currentTotal: number): void;
-    getRate(): number;
-}
+declare const createPerformanceTracker: () => {
+    reset: () => void;
+    update: (currentTotal: number) => void;
+    getRate: () => number;
+};
 
 /**
  * Returns the UTC day of the week for a given timestamp.
@@ -147,4 +124,4 @@ declare function getDayOfWeek(timestamp: Timestamp): number;
  */
 declare function getHourOfDay(timestamp: Timestamp): number;
 
-export { type Accumulator, type Content, ContentSchema, DAYS, EventAccumulator, HOURS, PerformanceTracker, REFRESH_RATE_MILLISECONDS, SOCIAL_MEDIAS, SOCIAL_MEDIA_TEXT_MAP, SSEClient, type SSEOptions, STREAM_URL, type SocialMedias, SocialMediasSchema, StreamService, type StreamServiceListener, type StreamState, type Timestamp, type Totals, type WeekdayHourlyCount, calculateIntensity, calculateMaxHourlyCount, getDayOfWeek, getHourOfDay };
+export { type Accumulator, type Content, ContentSchema, DAYS, HOURS, REFRESH_RATE_MILLISECONDS, SOCIAL_MEDIAS, SOCIAL_MEDIA_TEXT_MAP, type SSEOptions, STREAM_URL, type SocialMedias, SocialMediasSchema, type StreamService, type StreamServiceListener, type StreamState, type Timestamp, type Totals, type WeekdayHourlyCount, calculateIntensity, calculateMaxHourlyCount, createEventAccumulator, createPerformanceTracker, createSSEClient, createStreamService, getDayOfWeek, getHourOfDay };

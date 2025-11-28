@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { EventAccumulator } from './event-accumulator'
+import { createEventAccumulator } from './event-accumulator'
 
 describe('PostAggregator', () => {
-  let aggregator: EventAccumulator
+  let aggregator: ReturnType<typeof createEventAccumulator>
 
   beforeEach(() => {
-    aggregator = new EventAccumulator()
+    aggregator = createEventAccumulator()
   })
 
   it('should initialize with empty data', () => {

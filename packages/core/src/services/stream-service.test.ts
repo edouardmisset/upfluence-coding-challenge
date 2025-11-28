@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { StreamService } from './stream-service'
+import { createStreamService } from './stream-service'
 import { REFRESH_RATE_MILLISECONDS } from '../constants'
 
 const mockEventSource = {
@@ -18,12 +18,12 @@ vi.stubGlobal(
 )
 
 describe('StreamService', () => {
-  let service: StreamService
+  let service: ReturnType<typeof createStreamService>
 
   beforeEach(() => {
     vi.useFakeTimers()
     vi.clearAllMocks()
-    service = new StreamService('http://test.com')
+    service = createStreamService('http://test.com')
     mockEventSource.onopen = null
     mockEventSource.onmessage = null
   })

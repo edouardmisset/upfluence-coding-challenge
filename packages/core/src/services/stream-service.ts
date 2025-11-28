@@ -1,12 +1,12 @@
 import { REFRESH_RATE_MILLISECONDS } from '../constants'
 import {
-  EventAccumulator,
+  createEventAccumulator,
   type Accumulator,
   type Totals,
 } from '../accumulator/event-accumulator'
-import { PerformanceTracker } from '../utils/performance-tracker'
+import { createPerformanceTracker } from '../utils/performance-tracker'
 import { SocialMedias, type Timestamp } from '../validators/schemas'
-import { SSEClient } from '../stream/sse-client'
+import { createSSEClient } from '../stream/sse-client'
 
 export type StreamState = {
   isConnected: boolean
@@ -18,94 +18,96 @@ export type StreamState = {
 
 export type StreamServiceListener = (state: StreamState) => void
 
-export class StreamService {
-  private client: SSEClient
-  private accumulator: EventAccumulator
-  private performanceTracker: PerformanceTracker
-  private listeners: Set<StreamServiceListener> = new Set()
-  private state: StreamState
-  private updateInterval: ReturnType<typeof setInterval> | null = null
+export const createStreamService = (url: string) => {
+  const accumulator = createEventAccumulator()
+  const performanceTracker = createPerformanceTracker()
+  const listeners = new Set<StreamServiceListener>()
 
-  constructor(url: string) {
-    this.accumulator = new EventAccumulator()
-    this.performanceTracker = new PerformanceTracker()
-
-    this.state = {
-      isConnected: false,
-      accumulator: this.accumulator.getData(),
-      totals: this.accumulator.getAllTotals(),
-      eventsPerSecond: 0,
-      totalEvents: 0,
-    }
-
-    this.client = new SSEClient(url, {
-      onOpen: () => this.handleConnectionChange(true),
-      onError: () => this.handleConnectionChange(false),
-      onMessage: (type, timestamp) => this.handleMessage(type, timestamp),
-    })
+  let state: StreamState = {
+    isConnected: false,
+    accumulator: accumulator.getData(),
+    totals: accumulator.getAllTotals(),
+    eventsPerSecond: 0,
+    totalEvents: 0,
   }
 
-  connect() {
-    this.client.connect()
-    this.startUpdateLoop()
+  let updateInterval: ReturnType<typeof setInterval> | null = null
+
+  const notifyListeners = () => {
+    listeners.forEach((listener) => listener(state))
   }
 
-  disconnect() {
-    this.client.disconnect()
-    this.stopUpdateLoop()
-    this.handleConnectionChange(false)
+  const handleConnectionChange = (isConnected: boolean) => {
+    state = { ...state, isConnected }
+    notifyListeners()
   }
 
-  subscribe(listener: StreamServiceListener): () => void {
-    this.listeners.add(listener)
-    listener(this.state) // Immediate update
-    return () => {
-      this.listeners.delete(listener)
-    }
+  const handleMessage = (type: SocialMedias, timestamp: Timestamp) => {
+    accumulator.increment(type, timestamp)
   }
 
-  private handleConnectionChange(isConnected: boolean) {
-    this.state = { ...this.state, isConnected }
-    this.notifyListeners()
-  }
-
-  private handleMessage(type: SocialMedias, timestamp: Timestamp) {
-    this.accumulator.increment(type, timestamp)
-  }
-
-  private startUpdateLoop() {
-    if (this.updateInterval) return
-
-    this.updateInterval = setInterval(() => {
-      this.updateState()
-    }, REFRESH_RATE_MILLISECONDS)
-  }
-
-  private stopUpdateLoop() {
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval)
-      this.updateInterval = null
-    }
-  }
-
-  private updateState() {
-    const totals = this.accumulator.getAllTotals()
+  const updateState = () => {
+    const totals = accumulator.getAllTotals()
     const totalEvents = Object.values(totals).reduce((a, b) => a + b, 0)
 
-    this.performanceTracker.update(totalEvents)
+    performanceTracker.update(totalEvents)
 
-    this.state = {
-      ...this.state,
-      accumulator: { ...this.accumulator.getData() },
+    state = {
+      ...state,
+      accumulator: { ...accumulator.getData() },
       totals: { ...totals },
-      eventsPerSecond: this.performanceTracker.getRate(),
+      eventsPerSecond: performanceTracker.getRate(),
       totalEvents,
     }
 
-    this.notifyListeners()
+    notifyListeners()
   }
 
-  private notifyListeners() {
-    this.listeners.forEach((listener) => listener(this.state))
+  const startUpdateLoop = () => {
+    if (updateInterval) return
+
+    updateInterval = setInterval(() => {
+      updateState()
+    }, REFRESH_RATE_MILLISECONDS)
+  }
+
+  const stopUpdateLoop = () => {
+    if (updateInterval) {
+      clearInterval(updateInterval)
+      updateInterval = null
+    }
+  }
+
+  const client = createSSEClient(url, {
+    onOpen: () => handleConnectionChange(true),
+    onError: () => handleConnectionChange(false),
+    onMessage: handleMessage,
+  })
+
+  const connect = () => {
+    client.connect()
+    startUpdateLoop()
+  }
+
+  const disconnect = () => {
+    client.disconnect()
+    stopUpdateLoop()
+    handleConnectionChange(false)
+  }
+
+  const subscribe = (listener: StreamServiceListener): (() => void) => {
+    listeners.add(listener)
+    listener(state) // Immediate update
+    return () => {
+      listeners.delete(listener)
+    }
+  }
+
+  return {
+    connect,
+    disconnect,
+    subscribe,
   }
 }
+
+export type StreamService = ReturnType<typeof createStreamService>

@@ -11,32 +11,25 @@ export type SSEOptions = {
   onOpen?: (event: Event) => void
 }
 
-export class SSEClient {
-  private eventSource: EventSource | null = null
-  private url: string
-  private options: SSEOptions
+export const createSSEClient = (url: string, options: SSEOptions = {}) => {
+  let eventSource: EventSource | null = null
 
-  constructor(url: string, options: SSEOptions = {}) {
-    this.url = url
-    this.options = options
-  }
-
-  connect() {
-    if (this.eventSource) {
-      this.eventSource.close()
+  const connect = () => {
+    if (eventSource) {
+      eventSource.close()
     }
 
-    this.eventSource = new EventSource(this.url)
+    eventSource = new EventSource(url)
 
-    this.eventSource.onopen = (event) => {
-      this.options.onOpen?.(event)
+    eventSource.onopen = (event) => {
+      options.onOpen?.(event)
     }
 
-    this.eventSource.onerror = (error) => {
-      this.options.onError?.(error)
+    eventSource.onerror = (error) => {
+      options.onError?.(error)
     }
 
-    this.eventSource.onmessage = (event) => {
+    eventSource.onmessage = (event) => {
       try {
         const json = JSON.parse(event.data)
         const keys = Object.keys(json)
@@ -49,7 +42,7 @@ export class SSEClient {
         const parsedContent = ContentSchema.safeParse(content)
 
         if (parsedSocialMedia.success && parsedContent.success) {
-          this.options.onMessage?.(
+          options.onMessage?.(
             parsedSocialMedia.data,
             parsedContent.data.timestamp,
           )
@@ -62,10 +55,12 @@ export class SSEClient {
     }
   }
 
-  disconnect() {
-    if (this.eventSource) {
-      this.eventSource.close()
-      this.eventSource = null
+  const disconnect = () => {
+    if (eventSource) {
+      eventSource.close()
+      eventSource = null
     }
   }
+
+  return { connect, disconnect }
 }

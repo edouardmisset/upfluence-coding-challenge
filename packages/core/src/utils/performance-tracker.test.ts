@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { PerformanceTracker } from './performance-tracker'
+import { createPerformanceTracker } from './performance-tracker'
 
 describe('PerformanceTracker', () => {
-  let tracker: PerformanceTracker
+  let tracker: ReturnType<typeof createPerformanceTracker>
 
   beforeEach(() => {
     vi.useFakeTimers()
-    tracker = new PerformanceTracker()
+    tracker = createPerformanceTracker()
   })
 
   afterEach(() => {

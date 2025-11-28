@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { SSEClient } from './sse-client'
+import { createSSEClient } from './sse-client'
 
 const mockEventSource = {
   close: vi.fn(),
@@ -23,11 +23,11 @@ describe('SSEClient', () => {
     onError: vi.fn(),
     onOpen: vi.fn(),
   }
-  let client: SSEClient
+  let client: ReturnType<typeof createSSEClient>
 
   beforeEach(() => {
     vi.clearAllMocks()
-    client = new SSEClient(url, handlers)
+    client = createSSEClient(url, handlers)
     // Reset event handlers on the mock
     mockEventSource.onopen = null
     mockEventSource.onerror = null

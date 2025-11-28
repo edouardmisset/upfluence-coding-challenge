@@ -7,38 +7,26 @@ function getHourOfDay(timestamp) {
 }
 
 // src/accumulator/event-accumulator.ts
-var EventAccumulator = class {
-  accumulator;
-  totals;
-  constructor() {
-    this.accumulator = {};
-    this.totals = {};
-  }
-  increment(postType, timestamp) {
+var createEventAccumulator = () => {
+  const accumulator = {};
+  const totals = {};
+  const increment = (postType, timestamp) => {
     const day = getDayOfWeek(timestamp);
     const hour = getHourOfDay(timestamp);
-    if (!this.accumulator[postType]) {
-      this.accumulator[postType] = {};
-      this.totals[postType] = 0;
-    }
-    if (!this.accumulator[postType][day]) {
-      this.accumulator[postType][day] = {};
-    }
-    if (!this.accumulator[postType][day][hour]) {
-      this.accumulator[postType][day][hour] = 0;
-    }
-    this.accumulator[postType][day][hour]++;
-    this.totals[postType]++;
-  }
-  getData() {
-    return this.accumulator;
-  }
-  getTotal(postType) {
-    return this.totals[postType] || 0;
-  }
-  getAllTotals() {
-    return this.totals;
-  }
+    const postTypeData = accumulator[postType] ??= {};
+    const dayData = postTypeData[day] ??= {};
+    dayData[hour] = (dayData[hour] ?? 0) + 1;
+    totals[postType] = (totals[postType] ?? 0) + 1;
+  };
+  const getData = () => accumulator;
+  const getTotal = (postType) => totals[postType] || 0;
+  const getAllTotals = () => totals;
+  return {
+    increment,
+    getData,
+    getTotal,
+    getAllTotals
+  };
 };
 
 // src/constants.ts
@@ -103,31 +91,32 @@ function roundToPrecision(decimalNumber, precision = 0) {
 }
 
 // src/utils/performance-tracker.ts
-var PerformanceTracker = class {
-  lastTime = 0;
-  previousTotal = 0;
-  rate = 0;
-  constructor() {
-    this.reset();
-  }
-  reset() {
-    this.lastTime = Date.now();
-    this.previousTotal = 0;
-    this.rate = 0;
-  }
-  update(currentTotal) {
+var createPerformanceTracker = () => {
+  let lastTime = 0;
+  let previousTotal = 0;
+  let rate = 0;
+  const reset = () => {
+    lastTime = Date.now();
+    previousTotal = 0;
+    rate = 0;
+  };
+  const update = (currentTotal) => {
     const now = Date.now();
-    const timeDifferenceInSeconds = (now - this.lastTime) / 1e3;
+    const timeDifferenceInSeconds = (now - lastTime) / 1e3;
     if (timeDifferenceInSeconds > 0) {
-      const countDiff = currentTotal - this.previousTotal;
-      this.rate = roundToPrecision(countDiff / timeDifferenceInSeconds, 1);
+      const countDiff = currentTotal - previousTotal;
+      rate = roundToPrecision(countDiff / timeDifferenceInSeconds, 1);
     }
-    this.previousTotal = currentTotal;
-    this.lastTime = now;
-  }
-  getRate() {
-    return this.rate;
-  }
+    previousTotal = currentTotal;
+    lastTime = now;
+  };
+  const getRate = () => rate;
+  reset();
+  return {
+    reset,
+    update,
+    getRate
+  };
 };
 
 // src/validators/schemas.ts
@@ -139,26 +128,20 @@ var ContentSchema = z.object({
 });
 
 // src/stream/sse-client.ts
-var SSEClient = class {
-  eventSource = null;
-  url;
-  options;
-  constructor(url, options = {}) {
-    this.url = url;
-    this.options = options;
-  }
-  connect() {
-    if (this.eventSource) {
-      this.eventSource.close();
+var createSSEClient = (url, options = {}) => {
+  let eventSource = null;
+  const connect = () => {
+    if (eventSource) {
+      eventSource.close();
     }
-    this.eventSource = new EventSource(this.url);
-    this.eventSource.onopen = (event) => {
-      this.options.onOpen?.(event);
+    eventSource = new EventSource(url);
+    eventSource.onopen = (event) => {
+      options.onOpen?.(event);
     };
-    this.eventSource.onerror = (error) => {
-      this.options.onError?.(error);
+    eventSource.onerror = (error) => {
+      options.onError?.(error);
     };
-    this.eventSource.onmessage = (event) => {
+    eventSource.onmessage = (event) => {
       try {
         const json = JSON.parse(event.data);
         const keys = Object.keys(json);
@@ -168,7 +151,7 @@ var SSEClient = class {
         const parsedSocialMedia = SocialMediasSchema.safeParse(socialMedia);
         const parsedContent = ContentSchema.safeParse(content);
         if (parsedSocialMedia.success && parsedContent.success) {
-          this.options.onMessage?.(
+          options.onMessage?.(
             parsedSocialMedia.data,
             parsedContent.data.timestamp
           );
@@ -179,90 +162,90 @@ var SSEClient = class {
         console.error("Failed to parse SSE message", e);
       }
     };
-  }
-  disconnect() {
-    if (this.eventSource) {
-      this.eventSource.close();
-      this.eventSource = null;
+  };
+  const disconnect = () => {
+    if (eventSource) {
+      eventSource.close();
+      eventSource = null;
     }
-  }
+  };
+  return { connect, disconnect };
 };
 
 // src/services/stream-service.ts
-var StreamService = class {
-  client;
-  accumulator;
-  performanceTracker;
-  listeners = /* @__PURE__ */ new Set();
-  state;
-  updateInterval = null;
-  constructor(url) {
-    this.accumulator = new EventAccumulator();
-    this.performanceTracker = new PerformanceTracker();
-    this.state = {
-      isConnected: false,
-      accumulator: this.accumulator.getData(),
-      totals: this.accumulator.getAllTotals(),
-      eventsPerSecond: 0,
-      totalEvents: 0
-    };
-    this.client = new SSEClient(url, {
-      onOpen: () => this.handleConnectionChange(true),
-      onError: () => this.handleConnectionChange(false),
-      onMessage: (type, timestamp) => this.handleMessage(type, timestamp)
-    });
-  }
-  connect() {
-    this.client.connect();
-    this.startUpdateLoop();
-  }
-  disconnect() {
-    this.client.disconnect();
-    this.stopUpdateLoop();
-    this.handleConnectionChange(false);
-  }
-  subscribe(listener) {
-    this.listeners.add(listener);
-    listener(this.state);
-    return () => {
-      this.listeners.delete(listener);
-    };
-  }
-  handleConnectionChange(isConnected) {
-    this.state = { ...this.state, isConnected };
-    this.notifyListeners();
-  }
-  handleMessage(type, timestamp) {
-    this.accumulator.increment(type, timestamp);
-  }
-  startUpdateLoop() {
-    if (this.updateInterval) return;
-    this.updateInterval = setInterval(() => {
-      this.updateState();
-    }, REFRESH_RATE_MILLISECONDS);
-  }
-  stopUpdateLoop() {
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval);
-      this.updateInterval = null;
-    }
-  }
-  updateState() {
-    const totals = this.accumulator.getAllTotals();
+var createStreamService = (url) => {
+  const accumulator = createEventAccumulator();
+  const performanceTracker = createPerformanceTracker();
+  const listeners = /* @__PURE__ */ new Set();
+  let state = {
+    isConnected: false,
+    accumulator: accumulator.getData(),
+    totals: accumulator.getAllTotals(),
+    eventsPerSecond: 0,
+    totalEvents: 0
+  };
+  let updateInterval = null;
+  const notifyListeners = () => {
+    listeners.forEach((listener) => listener(state));
+  };
+  const handleConnectionChange = (isConnected) => {
+    state = { ...state, isConnected };
+    notifyListeners();
+  };
+  const handleMessage = (type, timestamp) => {
+    accumulator.increment(type, timestamp);
+  };
+  const updateState = () => {
+    const totals = accumulator.getAllTotals();
     const totalEvents = Object.values(totals).reduce((a, b) => a + b, 0);
-    this.performanceTracker.update(totalEvents);
-    this.state = {
-      ...this.state,
-      accumulator: { ...this.accumulator.getData() },
+    performanceTracker.update(totalEvents);
+    state = {
+      ...state,
+      accumulator: { ...accumulator.getData() },
       totals: { ...totals },
-      eventsPerSecond: this.performanceTracker.getRate(),
+      eventsPerSecond: performanceTracker.getRate(),
       totalEvents
     };
-    this.notifyListeners();
-  }
-  notifyListeners() {
-    this.listeners.forEach((listener) => listener(this.state));
-  }
+    notifyListeners();
+  };
+  const startUpdateLoop = () => {
+    if (updateInterval) return;
+    updateInterval = setInterval(() => {
+      updateState();
+    }, REFRESH_RATE_MILLISECONDS);
+  };
+  const stopUpdateLoop = () => {
+    if (updateInterval) {
+      clearInterval(updateInterval);
+      updateInterval = null;
+    }
+  };
+  const client = createSSEClient(url, {
+    onOpen: () => handleConnectionChange(true),
+    onError: () => handleConnectionChange(false),
+    onMessage: handleMessage
+  });
+  const connect = () => {
+    client.connect();
+    startUpdateLoop();
+  };
+  const disconnect = () => {
+    client.disconnect();
+    stopUpdateLoop();
+    handleConnectionChange(false);
+  };
+  const subscribe = (listener) => {
+    listeners.add(listener);
+    listener(state);
+    return () => {
+      listeners.delete(listener);
+    };
+  };
+  return {
+    connect,
+    disconnect,
+    subscribe
+  };
 };
 
 // src/utils/calculate-intensity.ts
@@ -283,18 +266,18 @@ function calculateMaxHourlyCount(weekdayHourlyCount) {
 export {
   ContentSchema,
   DAYS,
-  EventAccumulator,
   HOURS,
-  PerformanceTracker,
   REFRESH_RATE_MILLISECONDS,
   SOCIAL_MEDIAS,
   SOCIAL_MEDIA_TEXT_MAP,
-  SSEClient,
   STREAM_URL,
   SocialMediasSchema,
-  StreamService,
   calculateIntensity,
   calculateMaxHourlyCount,
+  createEventAccumulator,
+  createPerformanceTracker,
+  createSSEClient,
+  createStreamService,
   getDayOfWeek,
   getHourOfDay
 };

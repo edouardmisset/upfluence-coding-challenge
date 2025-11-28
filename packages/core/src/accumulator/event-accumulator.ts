@@ -12,43 +12,31 @@ export type Accumulator = Record<SocialMedias, WeekdayHourlyCount>
 
 export type Totals = Record<SocialMedias, number>
 
-export class EventAccumulator {
-  private accumulator: Accumulator
-  private totals: Totals
+export const createEventAccumulator = () => {
+  const accumulator = {} as Accumulator
+  const totals = {} as Totals
 
-  constructor() {
-    this.accumulator = {} as Accumulator
-    this.totals = {} as Totals
-  }
-
-  increment(postType: SocialMedias, timestamp: Timestamp) {
+  const increment = (postType: SocialMedias, timestamp: Timestamp) => {
     const day = getDayOfWeek(timestamp)
     const hour = getHourOfDay(timestamp)
 
-    if (!this.accumulator[postType]) {
-      this.accumulator[postType] = {}
-      this.totals[postType] = 0
-    }
-    if (!this.accumulator[postType][day]) {
-      this.accumulator[postType][day] = {}
-    }
-    if (!this.accumulator[postType][day][hour]) {
-      this.accumulator[postType][day][hour] = 0
-    }
+    const postTypeData = (accumulator[postType] ??= {})
+    const dayData = (postTypeData[day] ??= {})
 
-    this.accumulator[postType][day][hour]++
-    this.totals[postType]++
+    dayData[hour] = (dayData[hour] ?? 0) + 1
+    totals[postType] = (totals[postType] ?? 0) + 1
   }
 
-  getData(): Accumulator {
-    return this.accumulator
-  }
+  const getData = (): Accumulator => accumulator
 
-  getTotal(postType: SocialMedias): number {
-    return this.totals[postType] || 0
-  }
+  const getTotal = (postType: SocialMedias): number => totals[postType] || 0
 
-  getAllTotals(): Totals {
-    return this.totals
+  const getAllTotals = (): Totals => totals
+
+  return {
+    increment,
+    getData,
+    getTotal,
+    getAllTotals,
   }
 }
