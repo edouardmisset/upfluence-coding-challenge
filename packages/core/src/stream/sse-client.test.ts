@@ -11,7 +11,9 @@ const mockEventSource = {
 
 vi.stubGlobal(
   'EventSource',
-  vi.fn(() => mockEventSource),
+  vi.fn(function () {
+    return mockEventSource
+  }),
 )
 
 describe('SSEClient', () => {

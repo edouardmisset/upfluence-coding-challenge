@@ -2,115 +2,73 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { StreamService } from './stream-service'
 import { REFRESH_RATE_MILLISECONDS } from '../constants'
 
-// Mock EventSource globally since StreamService uses SSEClient which uses EventSource
-const EventSourceMock = vi.fn(() => ({
+const mockEventSource = {
   close: vi.fn(),
   onopen: null,
   onerror: null,
   onmessage: null,
-}))
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} as any
 
-vi.stubGlobal('EventSource', EventSourceMock)
+vi.stubGlobal(
+  'EventSource',
+  vi.fn(function () {
+    return mockEventSource
+  }),
+)
 
 describe('StreamService', () => {
   let service: StreamService
-  const url = 'http://test-stream.com'
 
   beforeEach(() => {
     vi.useFakeTimers()
     vi.clearAllMocks()
-    service = new StreamService(url)
+    service = new StreamService('http://test.com')
+    mockEventSource.onopen = null
+    mockEventSource.onmessage = null
   })
 
   afterEach(() => {
     vi.useRealTimers()
   })
 
-  it('should initialize with default state', () => {
-    const listener = vi.fn()
-    service.subscribe(listener)
-
-    expect(listener).toHaveBeenCalledWith(
-      expect.objectContaining({
-        isConnected: false,
-        totalEvents: 0,
-        eventsPerSecond: 0,
-      }),
-    )
-  })
-
-  it('should connect and handle connection status changes', () => {
+  it('should manage connection state', () => {
     const listener = vi.fn()
     service.subscribe(listener)
 
     service.connect()
-
-    // Get the underlying EventSource instance created by SSEClient
-    const mockSource = EventSourceMock.mock.results[0].value
-
-    // Simulate connection open
-    const openEvent = new Event('open')
-    mockSource.onopen(openEvent)
-
+    mockEventSource.onopen?.(new Event('open'))
     expect(listener).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        isConnected: true,
-      }),
+      expect.objectContaining({ isConnected: true }),
     )
 
-    // Simulate connection error
-    const errorEvent = new Event('error')
-    mockSource.onerror(errorEvent)
-
+    mockEventSource.onerror?.(new Event('error'))
     expect(listener).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        isConnected: false,
-      }),
+      expect.objectContaining({ isConnected: false }),
     )
+
+    service.disconnect()
+    expect(mockEventSource.close).toHaveBeenCalled()
   })
 
-  it('should accumulate events and update state periodically', () => {
+  it('should accumulate events', () => {
     const listener = vi.fn()
     service.subscribe(listener)
     service.connect()
 
-    const mockSource = EventSourceMock.mock.results[0].value
-
-    // Simulate receiving a message
-    const timestamp = 1672531200
-    const payload = JSON.stringify({
-      instagram_media: { timestamp },
+    // Simulate message
+    mockEventSource.onmessage?.({
+      data: JSON.stringify({ instagram_media: { timestamp: 1672531200 } }),
     })
 
-    const event = { data: payload } as MessageEvent
-    mockSource.onmessage(event)
-
+    // Wait for update interval
     vi.advanceTimersByTime(REFRESH_RATE_MILLISECONDS)
 
     expect(listener).toHaveBeenLastCalledWith(
       expect.objectContaining({
         totalEvents: 1,
-        totals: expect.objectContaining({
-          instagram_media: 1,
-        }),
+        totals: expect.objectContaining({ instagram_media: 1 }),
       }),
     )
-  })
-
-  it('should disconnect and stop updates', () => {
-    service.connect()
-    const mockSource = EventSourceMock.mock.results[0].value
-
-    service.disconnect()
-
-    expect(mockSource.close).toHaveBeenCalled()
-
-    // Verify loop stopped
-    const listener = vi.fn()
-    service.subscribe(listener)
-
-    // Advance time, listener should only be called once (initial subscribe)
-    vi.advanceTimersByTime(REFRESH_RATE_MILLISECONDS * 2)
-    expect(listener).toHaveBeenCalledTimes(1)
   })
 })

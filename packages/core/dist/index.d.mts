@@ -1,15 +1,20 @@
 import { z } from 'zod';
 
-declare const SocialMediasSchema: z.ZodEnum<["tiktok_video", "instagram_media", "story", "twitch_stream", "youtube_video", "pin", "article", "tweet", "facebook_status"]>;
+declare const SocialMediasSchema: z.ZodEnum<{
+    tiktok_video: "tiktok_video";
+    instagram_media: "instagram_media";
+    story: "story";
+    twitch_stream: "twitch_stream";
+    youtube_video: "youtube_video";
+    pin: "pin";
+    article: "article";
+    tweet: "tweet";
+    facebook_status: "facebook_status";
+}>;
 type SocialMedias = z.infer<typeof SocialMediasSchema>;
 declare const ContentSchema: z.ZodObject<{
-    /** Unix timestamp in seconds */
     timestamp: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    timestamp: number;
-}, {
-    timestamp: number;
-}>;
+}, z.core.$strip>;
 type Content = z.infer<typeof ContentSchema>;
 /** Unix timestamp in seconds */
 type Timestamp = Content['timestamp'];
