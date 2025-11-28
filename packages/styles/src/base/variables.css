@@ -75,8 +75,12 @@
   --space-2xl: 2.5rem;
 
   /* Layout */
-  --max-width-container: 90rem;
-  --card-min-width: 32rem;
+  --max-number-of-columns: 3;
+  --card-min-width: 30rem;
+  --max-width-container: calc(
+    var(--max-number-of-columns) * var(--card-min-width) +
+      calc(var(--max-number-of-columns) - 1) * var(--space-md)
+  );
 
   /* Typography */
   --font-size-xs: 0.75rem;

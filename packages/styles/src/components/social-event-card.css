@@ -37,6 +37,10 @@
     --social-color: var(--color-twitch);
   }
 
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+
   border: 1px solid hsl(from var(--social-color) h calc(s - 50) l);
   padding: var(--space-md);
   border-radius: var(--radius-lg);
@@ -48,7 +52,6 @@
 .social-event-header {
   display: flex;
   justify-content: space-between;
-  margin-block-end: var(--space-md);
   align-items: center;
 }
 

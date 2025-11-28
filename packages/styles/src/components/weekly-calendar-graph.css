@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: repeat(25, 1fr);
   gap: 2px;
+  line-height: 1;
 }
 
 .weekly-calendar-graph-label {
