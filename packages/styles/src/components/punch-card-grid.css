@@ -17,11 +17,31 @@
 
   --intensity: 0;
 
-  &[data-intensity] {
-    --intensity: attr(data-intensity number, 0);
+  &.intensity-1 {
+    --intensity: 1;
   }
 
-  &:not([data-intensity='0']) {
+  &.intensity-2 {
+    --intensity: 2;
+  }
+
+  &.intensity-3 {
+    --intensity: 3;
+  }
+
+  &.intensity-4 {
+    --intensity: 4;
+  }
+
+  &.intensity-5 {
+    --intensity: 5;
+  }
+
+  &.intensity-1,
+  &.intensity-2,
+  &.intensity-3,
+  &.intensity-4,
+  &.intensity-5 {
     background-color: color-mix(
       in oklch,
       var(--social-color),

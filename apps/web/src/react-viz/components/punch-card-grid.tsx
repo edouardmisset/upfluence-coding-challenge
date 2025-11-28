@@ -31,8 +31,7 @@ export function PunchCardGrid({ weekdayHourlyCount }: Props) {
             return (
               <div
                 key={hour}
-                className="punch-card-cell"
-                data-intensity={intensity}
+                className={`punch-card-cell intensity-${intensity}`}
                 title={`${dayName} ${hour}:00-${hour}:59 - ${count} events`}
               />
             )
