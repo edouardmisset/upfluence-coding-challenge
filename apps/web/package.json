@@ -12,20 +12,15 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/internal-helpers": "^0.7.5",
     "@astrojs/react": "^3.6.3",
     "@edouardmisset/math": "npm:@jsr/edouardmisset__math@^5.0.0",
     "@upfluence/core": "workspace:*",
     "@upfluence/styles": "workspace:*",
     "astro": "^4.16.19",
-    "es-module-lexer": "^1.7.0",
-    "kleur": "^4.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-error-boundary": "^5.0.0",
-    "scheduler": "^0.27.0",
-    "typescript": "~5.7.2",
-    "ultrahtml": "^1.6.0"
+    "typescript": "~5.7.2"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",

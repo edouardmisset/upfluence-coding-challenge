@@ -1,3 +1,5 @@
+import { roundToPrecision } from '@edouardmisset/math'
+
 export class PerformanceTracker {
   private lastTime: number = 0
   private previousTotal: number = 0
@@ -20,7 +22,7 @@ export class PerformanceTracker {
 
     if (timeDifferenceInSeconds > 0) {
       const countDiff = currentTotal - this.previousTotal
-      this.rate = this.roundToPrecision(countDiff / timeDifferenceInSeconds, 1)
+      this.rate = roundToPrecision(countDiff / timeDifferenceInSeconds, 1)
     }
 
     this.previousTotal = currentTotal
@@ -29,10 +31,5 @@ export class PerformanceTracker {
 
   getRate(): number {
     return this.rate
-  }
-
-  private roundToPrecision(value: number, precision: number): number {
-    const factor = 10 ** precision
-    return Math.round(value * factor) / factor
   }
 }

@@ -16,6 +16,7 @@
   background-color: var(--bg-surface-hover);
 
   --intensity: 0;
+
   &[data-intensity] {
     --intensity: attr(data-intensity number, 0);
   }

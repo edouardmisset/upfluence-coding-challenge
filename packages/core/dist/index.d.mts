@@ -104,6 +104,15 @@ declare function calculateIntensity({ count, maxCount, }: {
     maxCount: number;
 }): number;
 
+/**
+ * Calculates the maximum hourly count from a WeekdayHourlyCount object.
+ * Note: If all counts are falsy (0 or empty), it returns 1.
+ *
+ * @param {WeekdayHourlyCount} weekdayHourlyCount - An object mapping weekdays
+ * to hourly counts.
+ * @returns {number} The maximum count found in any hour of any day, or 1 if all
+ * values are falsy.
+ */
 declare function calculateMaxHourlyCount(weekdayHourlyCount: WeekdayHourlyCount): number;
 
 declare class PerformanceTracker {
@@ -114,7 +123,6 @@ declare class PerformanceTracker {
     reset(): void;
     update(currentTotal: number): void;
     getRate(): number;
-    private roundToPrecision;
 }
 
 /**

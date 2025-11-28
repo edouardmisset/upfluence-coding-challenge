@@ -152,6 +152,14 @@ var SSEClient = class {
   }
 };
 
+// ../../node_modules/.pnpm/@jsr+edouardmisset__function@5.0.0/node_modules/@jsr/edouardmisset__function/get-env.js
+import process from "process";
+
+// ../../node_modules/.pnpm/@jsr+edouardmisset__math@5.0.0/node_modules/@jsr/edouardmisset__math/round-to-precision.js
+function roundToPrecision(decimalNumber, precision = 0) {
+  return Math.round(decimalNumber * 10 ** precision) / 10 ** precision;
+}
+
 // src/utils/performance-tracker.ts
 var PerformanceTracker = class {
   lastTime = 0;
@@ -170,17 +178,13 @@ var PerformanceTracker = class {
     const timeDifferenceInSeconds = (now - this.lastTime) / 1e3;
     if (timeDifferenceInSeconds > 0) {
       const countDiff = currentTotal - this.previousTotal;
-      this.rate = this.roundToPrecision(countDiff / timeDifferenceInSeconds, 1);
+      this.rate = roundToPrecision(countDiff / timeDifferenceInSeconds, 1);
     }
     this.previousTotal = currentTotal;
     this.lastTime = now;
   }
   getRate() {
     return this.rate;
-  }
-  roundToPrecision(value, precision) {
-    const factor = 10 ** precision;
-    return Math.round(value * factor) / factor;
   }
 };
 
@@ -272,6 +276,7 @@ function calculateIntensity({
 // src/utils/calculate-max-hourly-count.ts
 function calculateMaxHourlyCount(weekdayHourlyCount) {
   return Math.max(
+    0,
     ...Object.values(weekdayHourlyCount).flatMap((day) => Object.values(day))
   ) || 1;
 }
