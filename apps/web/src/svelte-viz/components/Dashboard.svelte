@@ -16,7 +16,7 @@
 <main class="dashboard-container">
   <header class="dashboard-header">
     <div>
-      <h1 class="dashboard-title">Upfluence Live Stream</h1>
+      <h1 class="dashboard-title">Upfluence Live Stream - Svelte</h1>
       <p class="dashboard-subtitle">
         Real-time social media events visualization
       </p>
