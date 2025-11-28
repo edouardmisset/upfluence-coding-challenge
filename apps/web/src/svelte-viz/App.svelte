@@ -6,6 +6,6 @@
 <svelte:boundary>
   <Dashboard />
   {#snippet failed(error, reset)}
-    <ErrorFallback {error} resetErrorBoundary={reset} />
+    <ErrorFallback error={error as Error} resetErrorBoundary={reset} />
   {/snippet}
 </svelte:boundary>
