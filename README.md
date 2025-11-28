@@ -1,9 +1,12 @@
 # Upfluence Coding Challenge - Real-time Social Media Visualization
 
-A high-performance, real-time 3D visualization of social media posts using Server-Sent Events (SSE). Built with a modern monorepo architecture to demonstrate production-ready patterns.
+A high-performance, real-time 3D visualization of social media posts using
+Server-Sent Events (SSE). Built with a modern monorepo architecture to
+demonstrate production-ready patterns.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
+![Astro](https://img.shields.io/badge/Astro-4.0-orange)
 ![React](https://img.shields.io/badge/React-19-blue)
 ![Vite](https://img.shields.io/badge/Vite-5.0-purple)
 
@@ -24,8 +27,8 @@ The project uses a **Turborepo** monorepo structure to separate concerns and ens
 graph TD
     SSE[SSE Stream] -->|Events| Core[packages/core]
     Core -->|Parsed Data| Aggregator[PostAggregator]
-    Aggregator -->|Batched Updates| ReactApp[apps/react-viz]
-    ReactApp -->|Render| Grid[PunchCardGrid]
+    Aggregator -->|Batched Updates| WebApp[apps/web]
+    WebApp -->|Render| Grid[PunchCardGrid]
 
     subgraph "packages/core"
         Client[SSEClient]
@@ -33,7 +36,7 @@ graph TD
         Validators[Zod Schemas]
     end
 
-    subgraph "apps/react-viz"
+    subgraph "apps/web"
         Hooks[Custom Hooks]
         Components[UI Components]
     end
@@ -45,8 +48,8 @@ graph TD
   - `SSEClient`: Manages connection stability.
   - `PostAggregator`: O(1) data structure for efficient updates.
   - `Zod Schemas`: Runtime validation for type safety.
-- **`apps/react-viz`**: React 19 SPA with Vite.
-  - `useAggregator`: Batches updates to prevent UI thrashing.
+- **`apps/web`**: Astro application hosting the React visualization.
+  - `useAccumulator`: Batches updates to prevent UI thrashing.
   - `PunchCardGrid`: Responsive CSS Grid visualization.
 
 ## 🛠 Getting Started
@@ -69,8 +72,7 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000` to view the landing page.
-The React application runs on port 3001 but is proxied through the landing page.
+Open `http://localhost:4321/upfluence-coding-challenge/` to view the landing page.
 
 ## 🧪 Testing & Quality
 
@@ -94,6 +96,7 @@ pnpm format
 | **Monorepo** | Single Repo   | Separates core logic from UI, enabling future multi-framework implementations (e.g., Ember). |
 | **pnpm**     | npm/yarn      | Faster installation and efficient disk usage via content-addressable storage.                |
 | **Zod**      | Manual Checks | Provides runtime type safety and automatic TypeScript type inference.                        |
+| **Astro**    | Vite/Next.js  | Lightweight container for multiple framework integrations (React, Vue, etc.).                |
 | **React**    | Ember/Vue     | Chosen for rapid prototyping speed.                                                          |
 | **CSS Grid** | Canvas        | Sufficient performance for 7x24 grid while remaining accessible and easy to style.           |
 
