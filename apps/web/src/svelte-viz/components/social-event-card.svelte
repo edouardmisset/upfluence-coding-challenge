@@ -1,5 +1,5 @@
 <script lang="ts">
-  import WeeklyCalendarGraph from './WeeklyCalendarGraph.svelte'
+  import WeeklyCalendarGraph from './weekly-calendar-graph.svelte'
   import {
     SOCIAL_MEDIA_TEXT_MAP,
     type SocialMedias,

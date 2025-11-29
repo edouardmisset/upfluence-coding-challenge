@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import WeeklyCalendarGraph from './WeeklyCalendarGraph.vue'
+import WeeklyCalendarGraph from './weekly-calendar-graph.vue'
 import {
   SOCIAL_MEDIA_TEXT_MAP,
   type SocialMedias,

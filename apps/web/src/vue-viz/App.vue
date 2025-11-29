@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onErrorCaptured } from 'vue'
-import Dashboard from './components/Dashboard.vue'
-import ErrorFallback from './components/ErrorFallback.vue'
+import Dashboard from './components/dashboard.vue'
+import ErrorFallback from './components/error-fallback.vue'
 
 const error = ref<Error | null>(null)
 

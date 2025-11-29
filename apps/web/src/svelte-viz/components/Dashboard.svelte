@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createStreamState } from '../state/stream-service.svelte'
-  import SocialEventCard from './SocialEventCard.svelte'
-  import ConnectionStatus from './ConnectionStatus.svelte'
+  import SocialEventCard from './social-event-card.svelte'
+  import ConnectionStatus from './connection-status.svelte'
   import { SOCIAL_MEDIAS } from '@upfluence/core'
 
   const streamState = createStreamState()

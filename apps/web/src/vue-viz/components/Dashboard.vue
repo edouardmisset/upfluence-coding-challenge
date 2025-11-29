@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useStreamService } from '../composables/use-stream-service'
-import SocialEventCard from './SocialEventCard.vue'
-import ConnectionStatus from './ConnectionStatus.vue'
+import SocialEventCard from './social-event-card.vue'
+import ConnectionStatus from './connection-status.vue'
 import { SOCIAL_MEDIAS } from '@upfluence/core'
 
 const state = useStreamService()
