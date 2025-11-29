@@ -82,7 +82,20 @@ The "presentation" layer.
 | :--- | :--- | :--- |
 | **Package Manager** | **pnpm** | Fast and allows us to use monorepos efficiently. |
 | **Validation** | **Zod** | Runtime validation is critical for external streams. Zod infers TS types, reducing duplication. |
-| **State Management** | **Observable Pattern** | The `StreamService` implements a simple observer pattern, avoiding the overhead of Redux/Vuex for this specific use case. |
+| **State Management** | **Observer Pattern** | The `StreamService` implements a simple observer pattern, avoiding the overhead of Redux/Vuex for this specific use case. |
+
+Note on the **observer pattern**:
+
+> The observable pattern is a software design pattern in which an object, known as
+> the "subject" or "observable," maintains a list of its dependents, called
+> "observers," and notifies them automatically of any state changes, usually by
+> calling one of their methods.
+>
+> [Wikipedia](https://en.wikipedia.org/wiki/Observer_pattern)
+
+This pattern is particularly useful for implementing distributed event handling
+systems, where changes in one part of the system need to be communicated to
+other parts.
 
 ## Trade-offs & Future Improvements
 
