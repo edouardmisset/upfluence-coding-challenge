@@ -1,3 +1,5 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
   import Dashboard from './components/Dashboard.svelte'
   import ErrorFallback from './components/ErrorFallback.svelte'

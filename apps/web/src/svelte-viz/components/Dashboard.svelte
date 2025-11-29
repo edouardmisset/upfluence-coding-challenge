@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import { createStreamState } from '../state/stream-service.svelte'
   import SocialEventCard from './SocialEventCard.svelte'
   import ConnectionStatus from './ConnectionStatus.svelte'
@@ -7,7 +6,7 @@
 
   const streamState = createStreamState()
 
-  onMount(() => {
+  $effect(() => {
     const cleanup = streamState.connect()
     return cleanup
   })
