@@ -11,70 +11,109 @@ demonstrate production-ready patterns.
 ![Vue](https://img.shields.io/badge/Vue-3-green)
 ![Svelte](https://img.shields.io/badge/Svelte-5-orange)
 
-## 🚀 Features
+## Solution Description
 
-- **Real-time Visualization**: Updates instantly via SSE stream (<5s latency).
-- **3D Weekly Calendar Graph**: Visualizes events by Day of Week × Hour of Day.
-- **Multi-type Support**: Handles 9 distinct event types simultaneously.
-- **High Performance**: Optimized aggregation engine handles 1000+ events/sec.
-- **Resilience**: Automatic reconnection with exponential backoff.
-- **Production Polish**: Error boundaries, loading states, and performance metrics.
+This project implements a production-grade, real-time visualization dashboard
+for social media event streams. It is designed to ingest high-frequency
+Server-Sent Events (SSE), aggregate them in real-time, and visualize the density
+of post types over a weekly schedule using a 3D-style calendar heatmap.
 
-## 🏗 Architecture
+The solution is architected as a monorepo to strictly separate the core business
+logic (data ingestion, validation, aggregation) from the presentation layer.
+This ensures that the complex stream processing logic is robust, testable, and
+reusable across different frontend frameworks (React, Vue, Svelte).
 
-The project is a Monorepo managed by Turborepo and pnpm. It is designed to
-strictly separate business logic from UI presentation, allowing the core logic
-to be written once and reused across multiple frontend frameworks (React, Vue,
-Svelte).
+### Key Features
 
-### Core Modules
+- **High-Throughput Ingestion**: Capable of handling 1000+ events/second with
+  minimal latency (<5s).
+- **Resilient Connectivity**: Implements robust SSE client with automatic
+  reconnection and exponential backoff strategies.
+- **Framework Agnostic Core**: Business logic is isolated in a pure TypeScript
+  package, ensuring consistency across UI implementations.
+- **Type Safety**: End-to-end type safety using TypeScript and Zod for runtime
+  validation of external data streams.
+- **Performance Optimized**: Uses O(1) aggregation algorithms to minimize CPU
+  usage during high-load spikes.
 
-1. core (The Brain)
+## Architecture & Technical Choices
 
-- **Purpose**: Contains all the "smart" code. It is completely
-  framework-agnostic (pure TypeScript).
+The system is built as a **Monorepo** using **Turborepo** and **pnpm**. This
+structure was chosen to simulate a real-world environment where core libraries
+are shared across multiple applications or micro-frontends.
+
+### 1. Core Logic (`packages/core`)
+
+The "brain" of the application is decoupled from the UI.
+
+- **Reasoning**: By isolating the stream processing logic, we ensure that the
+  most critical part of the application is framework-independent. This allows
+  for easier testing, better portability, and the ability to swap UI frameworks
+  without touching business rules.
+- **Tech Stack**: Pure TypeScript, Zod (Validation), Vitest (Testing).
 - **Key Components**:
-  - `SSEClient`: Manages the persistent connection to the Server-Sent Events
-    stream, handling reconnection automatically.
-  - `EventAccumulator`: An optimized in-memory data structure that aggregates
-    high-frequency data into buckets (Event Type → Day of Week → Hour of Day).
-  - `StreamService`: The orchestrator. It ties the client and accumulator
-    together, manages the application state, and exposes a subscription API for
-    the UI to listen to.
-  - `Zod Schemas`: Ensures all incoming data is validated at runtime before
-    being processed.
+  - `SSEClient`: Manages the persistent connection.
+  - `EventAccumulator`: Handles real-time data aggregation.
+  - `StreamService`: Orchestrates state and subscriptions.
 
-2. apps/web (The Presentation)
+### 2. Frontend Application (`apps/web`)
 
-- **Purpose**: The user interface.
-- **Framework**: Astro is used as the "App Shell" or container.
-- **Integrations**: It hosts three separate implementations of the visualization
-  dashboard:
-  - React (src/react-viz)
-  - Vue (src/vue-viz)
-  - Svelte (src/svelte-viz)
-- **Pattern**: Each framework implementation consumes the exact same
-  `StreamService` from `packages/core`, proving the reusability of the logic.
+The "presentation" layer.
 
-3. packages/styles (The Look)
+- **Reasoning**: We use **Astro** as the application shell. Astro serves as a
+  lightweight container for "Islands" of interactivity. This allowed us to
+  implement and showcase the visualization in **React**, **Vue**, and **Svelte**
+  side-by-side within the same application context.
+- **Visualization**: The 3D calendar is implemented using CSS Grid rather than
+  Canvas.
+  - *Why CSS Grid?* For the specific grid size (7 days * 24 hours = 168 cells),
+    DOM manipulation is fast enough and offers superior accessibility (screen
+    readers) and easier styling compared to a Canvas implementation.
 
-- **Purpose**: Shared design system.
-- **Tech**: Plain CSS with CSS Variables.
-- **Usage**: Ensures that the React, Vue, and Svelte versions look identical by
-  sharing the same CSS tokens and layout classes.
+### 3. Shared Styles (`packages/styles`)
 
-### Data Flow
+- **Reasoning**: To ensure visual consistency across different frameworks,
+  styles are defined in a framework-agnostic way using standard CSS and CSS
+  Variables.
 
-1. **Ingest**: The `SSEClient` receives a raw event from the stream.
-2. **Validate**: The data is checked against `Zod` schemas.
-3. **Aggregate**: The `EventAccumulator` increments the counter for the specific
-  `[EventType][Day][Hour]` bucket. This happens in `O(1)` time.
-4. **Broadcast**: The `StreamService` notifies all subscribed UI components of
-the new state.
-5. **Render**: The `WeeklyCalendarGraph` component (in React/Vue/Svelte) updates
-   the CSS Grid to reflect the new event counts.
+### Summary of Decisions
 
-## 🛠 Getting Started
+| Decision | Choice | Reasoning |
+| :--- | :--- | :--- |
+| **Package Manager** | **pnpm** | Fast and allows us to use monorepos efficiently. |
+| **Validation** | **Zod** | Runtime validation is critical for external streams. Zod infers TS types, reducing duplication. |
+| **State Management** | **Observable Pattern** | The `StreamService` implements a simple observer pattern, avoiding the overhead of Redux/Vuex for this specific use case. |
+
+## Trade-offs & Future Improvements
+
+While the current solution is robust, several trade-offs were made to balance
+complexity with the constraints of the challenge.
+
+### 1. In-Memory Aggregation vs. Persistence
+
+- **Current Approach**: The `EventAccumulator` stores all data in memory.
+- **Trade-off**: If the user refreshes the page, the historical data is lost.
+- **Production Solution**: In a real-world scenario, we would persist the
+  aggregated buckets to `IndexedDB` (client-side) or a time-series database
+  (server-side) to allow for historical analysis and session restoration.
+
+### 2. DOM vs. Canvas/WebGL
+
+- **Current Approach**: CSS Grid and DOM nodes.
+- **Trade-off**: If the refresh rate were to increase significantly, DOM
+  manipulation could become a bottleneck and canvas would be more efficient.
+- **Production Solution**: For larger datasets, migrating to WebGL (via
+  Three.js) or Canvas would be necessary to maintain high refresh rate.
+
+### 3. Testing Strategy
+
+- **Current Approach**: Heavy focus on Unit Tests for `packages/core` (100%
+  coverage of logic).
+- **Trade-off**: E2E tests (Playwright) are minimal.
+- **Production Solution**: Expand E2E coverage to simulate network failures and
+  verify recovery UI flows automatically.
+
+## Getting Started
 
 ### Prerequisites
 
@@ -94,7 +133,8 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:4321/upfluence-coding-challenge/` to view the landing page.
+Open `http://localhost:4321/upfluence-coding-challenge/` to view the landing
+page.
 
 ## 🧪 Testing & Quality
 
@@ -111,50 +151,9 @@ pnpm lint
 pnpm format
 ```
 
-## 💡 Technical Decisions
-
-| Decision             | Alternative   | Rationale                                                                          |
-| -------------------- | ------------- | ---------------------------------------------------------------------------------- |
-| **Monorepo**         | Single Repo   | Separates core logic from UI, enabling multi-framework implementations.            |
-| **pnpm**             | npm/yarn      | Faster installation and efficient disk usage via content-addressable storage.      |
-| **Zod**              | Manual Checks | Provides runtime type safety and automatic TypeScript type inference.              |
-| **Astro**            | Vite/Next.js  | Lightweight container for multiple framework integrations (React, Vue, Svelte).    |
-| **React/Vue/Svelte** | Ember         | Three frameworks implemented to demonstrate the architecture's flexibility.        |
-| **CSS Grid**         | Canvas        | Sufficient performance for 7x24 grid while remaining accessible and easy to style. |
-
-### Code Conventions
-
-- **File Naming**: All files use `kebab-case` (e.g., `social-event-card.tsx`) to
-  ensure consistent behavior across case-sensitive (Linux) and case-insensitive
-  (macOS/Windows) file systems.
-
-## ⚖️ Trade-offs
-
-- **Memory Usage**: The aggregator keeps all data in memory. For a production
-  app running for days, I would implement a sliding window (e.g., keep only last
-  7 days) or persist to IndexedDB.
-- **Visualization**: A Canvas-based approach (like Visx or raw Canvas) would be
-  more performant for massive datasets, but DOM nodes are sufficient for this
-  specific grid size (168 cells per card).
-- **State Management**: Used React Context/Local State for simplicity. For a
-  larger app, I would reach for Zustand or TanStack Query.
-
-## 🔮 Future Improvements
-
-- **Ember Implementation**: Add an Ember.js visualization to demonstrate
-  additional framework versatility (React, Vue, and Svelte are already
-  implemented).
-- **Data Persistence**: Save aggregated state to `localStorage` to survive
-  refreshes.
-- **Dark Mode**: Dark theming toggle.
-
-## 👤 Author
+## Author
 
 Edouard Misset
-
----
-
-_Built for the Upfluence Coding Challenge._
 
 ## Disclaimer
 
