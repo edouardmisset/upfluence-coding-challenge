@@ -66,7 +66,7 @@ The "presentation" layer.
   side-by-side within the same application context.
 - **Visualization**: The 3D calendar is implemented using CSS Grid rather than
   Canvas.
-  - *Why CSS Grid?* For the specific grid size (7 days * 24 hours = 168 cells),
+  - _Why CSS Grid?_ For the specific grid size (7 days \* 24 hours = 168 cells),
     DOM manipulation is fast enough and offers superior accessibility (screen
     readers) and easier styling compared to a Canvas implementation.
 
@@ -78,10 +78,10 @@ The "presentation" layer.
 
 ### Summary of Decisions
 
-| Decision | Choice | Reasoning |
-| :--- | :--- | :--- |
-| **Package Manager** | **pnpm** | Fast and allows us to use monorepos efficiently. |
-| **Validation** | **Zod** | Runtime validation is critical for external streams. Zod infers TS types, reducing duplication. |
+| Decision             | Choice               | Reasoning                                                                                                                 |
+| :------------------- | :------------------- | :------------------------------------------------------------------------------------------------------------------------ |
+| **Package Manager**  | **pnpm**             | Fast and allows us to use monorepos efficiently.                                                                          |
+| **Validation**       | **Zod**              | Runtime validation is critical for external streams. Zod infers TS types, reducing duplication.                           |
 | **State Management** | **Observer Pattern** | The `StreamService` implements a simple observer pattern, avoiding the overhead of Redux/Vuex for this specific use case. |
 
 Note on the **observer pattern**:
