@@ -3,17 +3,19 @@ import {
   type StreamService,
   type StreamState,
   STREAM_URL,
+  type Accumulator,
+  type Totals,
 } from '@upfluence/core'
 
 export function createStreamState() {
   let service: StreamService | null = null
   let state = $state<StreamState>({
     isConnected: false,
-    accumulator: {},
-    totals: {},
+    accumulator: {} as Accumulator,
+    totals: {} as Totals,
     eventsPerSecond: 0,
     totalEvents: 0,
-  } as StreamState)
+  } satisfies StreamState)
 
   function connect() {
     service = createStreamService(STREAM_URL)
