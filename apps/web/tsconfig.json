@@ -1,15 +1,8 @@
 {
+  "extends": "@upfluence/tsconfig/base.json",
   "compilerOptions": {
-    "target": "ES2023",
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "strict": true,
-    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

@@ -1,26 +1,31 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
+  "commitlint": {
+    "config": [".commitlintrc.json"]
+  },
+  "ignoreDependencies": [
+    "@commitlint/cli",
+    "conventional-changelog-conventionalcommits"
+  ],
   "workspaces": {
     ".": {
-      "entry": ["eslint.config.mjs"]
+      "entry": [
+        "eslint.config.mjs",
+        "scripts/**/*.{ts,js}",
+        ".commitlintrc.json"
+      ]
     },
     "packages/core": {
       "entry": ["src/index.ts"],
       "project": ["src/**/*.{ts,tsx}"]
     },
-    "apps/react-viz": {
+    "apps/web": {
       "entry": [
-        "index.html",
-        "src/main.tsx",
-        "vite.config.ts",
-        "playwright.config.ts",
-        "e2e/**/*.ts"
+        "astro.config.mjs",
+        "src/pages/**/*.{astro,ts,tsx,vue,svelte}",
+        "src/env.d.ts"
       ],
-      "project": ["src/**/*.{ts,tsx}"]
-    },
-    "apps/landing": {
-      "entry": ["index.html", "vite.config.js"],
-      "project": ["**/*.{js,ts}"]
+      "project": ["src/**/*.{ts,tsx,astro,vue,svelte}"]
     }
   }
 }

@@ -4,6 +4,20 @@ A high-performance, real-time 3D visualization of social media posts using
 Server-Sent Events (SSE). Built with a modern monorepo architecture to
 demonstrate production-ready patterns.
 
+## Tooling & Quality Assurance
+
+This project employs a rigorous suite of tools to ensure code quality and maintainability:
+
+- **Prettier**: Enforces consistent code formatting.
+- **ESLint**: Catches errors and enforces coding standards.
+- **TypeScript**: Provides static type checking for robustness.
+- **Knip**: Detects unused files and dependencies.
+- **Commitlint**: Enforces conventional commit messages.
+- **Semantic Release**: Automates versioning and package publishing.
+- **CSpell**: Checks for spelling errors in code and documentation.
+- **Stylelint**: Lints CSS for errors and consistency.
+- **GitHub Actions**: Automates CI/CD pipelines for testing and deployment.
+
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
 ![Astro](https://img.shields.io/badge/Astro-5.0-orange)

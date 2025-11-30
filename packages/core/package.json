@@ -12,6 +12,7 @@
     "test": "vitest run"
   },
   "devDependencies": {
+    "@upfluence/tsconfig": "workspace:*",
     "eslint": "^9.39.1",
     "tsup": "^8.5.0",
     "typescript": "^5.9.0",
