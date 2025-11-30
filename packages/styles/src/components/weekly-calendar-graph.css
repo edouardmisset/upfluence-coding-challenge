@@ -12,12 +12,14 @@
 }
 
 .weekly-calendar-graph-cell {
+  --timing: 500ms;
+
   aspect-ratio: 1;
   border-radius: 2px;
   background-color: var(--bg-surface-hover);
   transition:
-    background-color 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
+    background-color var(--timing) ease-in-out,
+    opacity var(--timing) ease-in-out;
 
   &.intensity-1,
   &.intensity-2,
