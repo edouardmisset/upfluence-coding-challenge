@@ -56,7 +56,7 @@ export const createStreamService = (url: string) => {
 
     state = {
       ...state,
-      accumulator: { ...accumulator.getData() },
+      accumulator: structuredClone(accumulator.getData()),
       totals: { ...totals },
       eventsPerSecond: performanceTracker.getRate(),
       totalEvents,

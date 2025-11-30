@@ -20,7 +20,18 @@ export const useStreamService = () => {
     const service = createStreamService(STREAM_URL)
     serviceRef.current = service
 
-    const unsubscribe = service.subscribe(setState)
+    const handleUpdate = (newState: StreamState) => {
+      if (!document.startViewTransition) {
+        setState(newState)
+        return
+      }
+
+      document.startViewTransition(() => {
+        setState(newState)
+      })
+    }
+
+    const unsubscribe = service.subscribe(handleUpdate)
     service.connect()
 
     return () => {

@@ -12,41 +12,40 @@
 }
 
 .weekly-calendar-graph-cell {
+  --timing: 500ms;
+
   aspect-ratio: 1;
   border-radius: 2px;
   background-color: var(--bg-surface-hover);
-
-  --intensity: 0;
-
-  &.intensity-1 {
-    --intensity: 1;
-  }
-
-  &.intensity-2 {
-    --intensity: 2;
-  }
-
-  &.intensity-3 {
-    --intensity: 3;
-  }
-
-  &.intensity-4 {
-    --intensity: 4;
-  }
-
-  &.intensity-5 {
-    --intensity: 5;
-  }
+  transition:
+    background-color var(--timing) ease-in-out,
+    opacity var(--timing) ease-in-out;
 
   &.intensity-1,
   &.intensity-2,
   &.intensity-3,
   &.intensity-4,
   &.intensity-5 {
-    background-color: color-mix(
-      in oklch,
-      var(--social-color),
-      transparent calc(100% - var(--intensity) * 20%)
-    );
+    background-color: var(--social-color);
+  }
+
+  &.intensity-1 {
+    opacity: 0.2;
+  }
+
+  &.intensity-2 {
+    opacity: 0.4;
+  }
+
+  &.intensity-3 {
+    opacity: 0.6;
+  }
+
+  &.intensity-4 {
+    opacity: 0.8;
+  }
+
+  &.intensity-5 {
+    opacity: 1;
   }
 }
