@@ -35,7 +35,7 @@ export const createSSEClient = (url: string, options: SSEOptions = {}) => {
         const keys = Object.keys(json)
         if (keys.length !== 1) return
 
-        const socialMedia = keys[0]
+        const socialMedia = keys[0] ?? ''
         const content = json[socialMedia]
 
         const parsedSocialMedia = SocialMediasSchema.safeParse(socialMedia)

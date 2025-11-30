@@ -15,16 +15,30 @@ export type Totals = Record<SocialMedias, number>
 
 export const createEventAccumulator = () => {
   const accumulator = {} as Accumulator
-  const totals = {} as Totals
+  const totals = {
+    instagram_media: 0,
+    story: 0,
+    tiktok_video: 0,
+    youtube_video: 0,
+    twitch_stream: 0,
+    pin: 0,
+    tweet: 0,
+    article: 0,
+    facebook_status: 0,
+  } satisfies Totals
 
   const increment = (socialMediaType: SocialMedias, timestamp: Timestamp) => {
     const day = getDayOfWeek(timestamp)
     const hour = getHourOfDay(timestamp)
 
-    const socialMediaData = (accumulator[socialMediaType] ??= {})
-    const dayData = (socialMediaData[day] ??= {})
-
-    dayData[hour] = (dayData[hour] ?? 0) + 1
+    if (!accumulator[socialMediaType]) {
+      accumulator[socialMediaType] = {} as WeekdayHourlyCount
+    }
+    if (!accumulator[socialMediaType][day]) {
+      accumulator[socialMediaType][day] = {} as Record<HourOfDay, number>
+    }
+    accumulator[socialMediaType][day][hour] =
+      (accumulator[socialMediaType][day][hour] ?? 0) + 1
     totals[socialMediaType] = (totals[socialMediaType] ?? 0) + 1
   }
 

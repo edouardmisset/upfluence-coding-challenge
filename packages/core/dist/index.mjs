@@ -9,13 +9,27 @@ function getHourOfDay(timestamp) {
 // src/accumulator/event-accumulator.ts
 var createEventAccumulator = () => {
   const accumulator = {};
-  const totals = {};
+  const totals = {
+    instagram_media: 0,
+    story: 0,
+    tiktok_video: 0,
+    youtube_video: 0,
+    twitch_stream: 0,
+    pin: 0,
+    tweet: 0,
+    article: 0,
+    facebook_status: 0
+  };
   const increment = (socialMediaType, timestamp) => {
     const day = getDayOfWeek(timestamp);
     const hour = getHourOfDay(timestamp);
-    const socialMediaData = accumulator[socialMediaType] ??= {};
-    const dayData = socialMediaData[day] ??= {};
-    dayData[hour] = (dayData[hour] ?? 0) + 1;
+    if (!accumulator[socialMediaType]) {
+      accumulator[socialMediaType] = {};
+    }
+    if (!accumulator[socialMediaType][day]) {
+      accumulator[socialMediaType][day] = {};
+    }
+    accumulator[socialMediaType][day][hour] = (accumulator[socialMediaType][day][hour] ?? 0) + 1;
     totals[socialMediaType] = (totals[socialMediaType] ?? 0) + 1;
   };
   const getData = () => accumulator;
@@ -150,7 +164,7 @@ var createSSEClient = (url, options = {}) => {
         const json = JSON.parse(event.data);
         const keys = Object.keys(json);
         if (keys.length !== 1) return;
-        const socialMedia = keys[0];
+        const socialMedia = keys[0] ?? "";
         const content = json[socialMedia];
         const parsedSocialMedia = SocialMediasSchema.safeParse(socialMedia);
         const parsedContent = ContentSchema.safeParse(content);
@@ -207,7 +221,7 @@ var createStreamService = (url) => {
     performanceTracker.update(totalEvents);
     state = {
       ...state,
-      accumulator: { ...accumulator.getData() },
+      accumulator: structuredClone(accumulator.getData()),
       totals: { ...totals },
       eventsPerSecond: performanceTracker.getRate(),
       totalEvents

@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react'
-import { flushSync } from 'react-dom'
 import {
   createStreamService,
   type StreamService,
@@ -28,8 +27,7 @@ export const useStreamService = () => {
       }
 
       document.startViewTransition(() => {
-        // eslint-disable-next-line sonarjs/no-nested-functions
-        flushSync(() => setState(newState))
+        setState(newState)
       })
     }
 
