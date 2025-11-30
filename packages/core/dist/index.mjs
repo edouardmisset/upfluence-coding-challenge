@@ -20,7 +20,11 @@ var createEventAccumulator = () => {
   };
   const getData = () => accumulator;
   const getTotal = (socialMediaType) => totals[socialMediaType] ?? 0;
-  const getAllTotals = () => totals;
+  const getAllTotals = () => {
+    return Object.fromEntries(
+      Object.entries(totals).toSorted(([, a], [, b]) => b - a)
+    );
+  };
   return {
     increment,
     getData,

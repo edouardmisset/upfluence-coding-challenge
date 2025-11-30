@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { flushSync } from 'react-dom'
 import {
   createStreamService,
   type StreamService,
@@ -20,7 +21,19 @@ export const useStreamService = () => {
     const service = createStreamService(STREAM_URL)
     serviceRef.current = service
 
-    const unsubscribe = service.subscribe(setState)
+    const handleUpdate = (newState: StreamState) => {
+      if (!document.startViewTransition) {
+        setState(newState)
+        return
+      }
+
+      document.startViewTransition(() => {
+        // eslint-disable-next-line sonarjs/no-nested-functions
+        flushSync(() => setState(newState))
+      })
+    }
+
+    const unsubscribe = service.subscribe(handleUpdate)
     service.connect()
 
     return () => {

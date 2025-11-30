@@ -33,7 +33,11 @@ export const createEventAccumulator = () => {
   const getTotal = (socialMediaType: SocialMedias): number =>
     totals[socialMediaType] ?? 0
 
-  const getAllTotals = (): Totals => totals
+  const getAllTotals = (): Totals => {
+    return Object.fromEntries(
+      Object.entries(totals).toSorted(([, a], [, b]) => b - a),
+    ) as Totals
+  }
 
   return {
     increment,

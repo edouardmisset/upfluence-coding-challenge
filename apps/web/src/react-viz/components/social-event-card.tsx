@@ -7,8 +7,13 @@ import {
 } from '@upfluence/core'
 
 export const SocialEventCard = memo(
-  ({ socialMedia, count, weekdayHourlyCount }: Props) => (
-    <article className="social-event-card" data-social={socialMedia}>
+  ({
+    socialMedia,
+    count,
+    weekdayHourlyCount,
+    ...props
+  }: Props & React.HTMLAttributes<HTMLElement>) => (
+    <article className="social-event-card" data-social={socialMedia} {...props}>
       <header className="social-event-header">
         <h3 className="social-event-title">
           {SOCIAL_MEDIA_TEXT_MAP[socialMedia]}

@@ -1,7 +1,6 @@
 import { useStreamService } from '../hooks/use-stream-service'
 import { SocialEventCard } from './social-event-card'
 import { ConnectionStatus } from './connection-status'
-import { SOCIAL_MEDIAS } from '@upfluence/core'
 
 export function Dashboard() {
   const {
@@ -32,14 +31,18 @@ export function Dashboard() {
       </header>
 
       <div className="dashboard-grid">
-        {SOCIAL_MEDIAS.map((socialMedia) => (
-          <SocialEventCard
-            key={socialMedia}
-            socialMedia={socialMedia}
-            count={totals[socialMedia] ?? 0}
-            weekdayHourlyCount={accumulator[socialMedia] ?? {}}
-          />
-        ))}
+        {Object.keys(totals).map((socialMedia) => {
+          const socialMediaKey = socialMedia as keyof typeof totals
+          return (
+            <SocialEventCard
+              key={socialMedia}
+              socialMedia={socialMediaKey}
+              count={totals[socialMediaKey] ?? 0}
+              weekdayHourlyCount={accumulator[socialMediaKey] ?? {}}
+              data-view-transition-name={socialMediaKey}
+            />
+          )
+        })}
       </div>
     </main>
   )

@@ -15,6 +15,7 @@
   aspect-ratio: 1;
   border-radius: 2px;
   background-color: var(--bg-surface-hover);
+  transition: background-color 0.3s ease-in-out;
 
   --intensity: 0;
 

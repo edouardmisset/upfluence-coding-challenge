@@ -51,3 +51,36 @@
   grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width), 1fr));
   gap: var(--space-md);
 }
+
+/* View Transition Mappings */
+[data-view-transition-name='pin'] {
+  view-transition-name: pin;
+}
+
+[data-view-transition-name='instagram_media'] {
+  view-transition-name: instagram_media;
+}
+
+[data-view-transition-name='youtube_video'] {
+  view-transition-name: youtube_video;
+}
+
+[data-view-transition-name='article'] {
+  view-transition-name: article;
+}
+
+[data-view-transition-name='tweet'] {
+  view-transition-name: tweet;
+}
+
+[data-view-transition-name='facebook_status'] {
+  view-transition-name: facebook_status;
+}
+
+[data-view-transition-name='twitch_stream'] {
+  view-transition-name: twitch_stream;
+}
+
+[data-view-transition-name='tiktok_video'] {
+  view-transition-name: tiktok_video;
+}
