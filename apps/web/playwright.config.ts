@@ -2,11 +2,13 @@ import { defineConfig, devices } from '@playwright/test'
 
 const baseURL = 'http://localhost:4321/upfluence-coding-challenge'
 
+const twoMinutesInSeconds = 120
+const maxRetries = 2
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? maxRetries : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
@@ -23,6 +25,6 @@ export default defineConfig({
     command: 'pnpm dev',
     url: baseURL,
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: twoMinutesInSeconds * 1000,
   },
 })

@@ -34,7 +34,9 @@ export const createStreamService = (url: string) => {
   let updateInterval: ReturnType<typeof setInterval> | null = null
 
   const notifyListeners = () => {
-    listeners.forEach((listener) => listener(state))
+    for (const listener of listeners) {
+      listener(state)
+    }
   }
 
   const handleConnectionChange = (isConnected: boolean) => {

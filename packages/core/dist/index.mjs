@@ -10,16 +10,16 @@ function getHourOfDay(timestamp) {
 var createEventAccumulator = () => {
   const accumulator = {};
   const totals = {};
-  const increment = (postType, timestamp) => {
+  const increment = (socialMediaType, timestamp) => {
     const day = getDayOfWeek(timestamp);
     const hour = getHourOfDay(timestamp);
-    const postTypeData = accumulator[postType] ??= {};
-    const dayData = postTypeData[day] ??= {};
+    const socialMediaData = accumulator[socialMediaType] ??= {};
+    const dayData = socialMediaData[day] ??= {};
     dayData[hour] = (dayData[hour] ?? 0) + 1;
-    totals[postType] = (totals[postType] ?? 0) + 1;
+    totals[socialMediaType] = (totals[socialMediaType] ?? 0) + 1;
   };
   const getData = () => accumulator;
-  const getTotal = (postType) => totals[postType] || 0;
+  const getTotal = (socialMediaType) => totals[socialMediaType] ?? 0;
   const getAllTotals = () => totals;
   return {
     increment,
@@ -158,8 +158,8 @@ var createSSEClient = (url, options = {}) => {
         } else {
           console.warn("Invalid payload:", json);
         }
-      } catch (e) {
-        console.error("Failed to parse SSE message", e);
+      } catch (error) {
+        console.error("Failed to parse SSE message", error);
       }
     };
   };
@@ -186,7 +186,9 @@ var createStreamService = (url) => {
   };
   let updateInterval = null;
   const notifyListeners = () => {
-    listeners.forEach((listener) => listener(state));
+    for (const listener of listeners) {
+      listener(state);
+    }
   };
   const handleConnectionChange = (isConnected) => {
     state = { ...state, isConnected };
@@ -253,7 +255,8 @@ function calculateIntensity({
   count,
   maxCount
 }) {
-  return 0 < count ? Math.ceil(count / maxCount * 5) : 0;
+  const numberOfBuckets = 5;
+  return 0 < count ? Math.ceil(count / maxCount * numberOfBuckets) : 0;
 }
 
 // src/utils/calculate-max-hourly-count.ts

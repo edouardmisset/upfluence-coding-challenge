@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 export const SOCIAL_MEDIAS = [
   'tiktok_video',
   'instagram_media',
@@ -29,4 +30,4 @@ export const HOURS = [
 ] as const
 
 export const STREAM_URL = 'https://stream.upfluence.co/stream'
-export const REFRESH_RATE_MILLISECONDS = 1_000
+export const REFRESH_RATE_MILLISECONDS = 1000

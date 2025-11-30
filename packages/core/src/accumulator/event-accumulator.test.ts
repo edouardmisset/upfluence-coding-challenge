@@ -15,7 +15,7 @@ describe('PostAggregator', () => {
 
   it('should increment counts correctly', () => {
     // Sunday (0), 10:00 AM (10)
-    const timestamp = 1672567200 // Jan 1 2023 10:00:00 UTC (Sunday)
+    const timestamp = 1_672_567_200 // Jan 1 2023 10:00:00 UTC (Sunday)
 
     aggregator.increment('tweet', timestamp)
 
@@ -25,7 +25,7 @@ describe('PostAggregator', () => {
   })
 
   it('should handle multiple increments', () => {
-    const timestamp = 1672567200 // Sunday 10am
+    const timestamp = 1_672_567_200 // Sunday 10am
 
     aggregator.increment('tweet', timestamp)
     aggregator.increment('tweet', timestamp)
@@ -39,8 +39,8 @@ describe('PostAggregator', () => {
   })
 
   it('should handle different days and hours', () => {
-    const sunday10am = 1672567200
-    const monday11am = 1672657200 // Jan 2 2023 11:00:00 UTC
+    const sunday10am = 1_672_567_200
+    const monday11am = 1_672_657_200 // Jan 2 2023 11:00:00 UTC
 
     aggregator.increment('tweet', sunday10am)
     aggregator.increment('tweet', monday11am)

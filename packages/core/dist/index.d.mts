@@ -28,9 +28,9 @@ type WeekdayHourlyCount = Record<WeekDay, Record<HourOfDay, number>>;
 type Accumulator = Record<SocialMedias, WeekdayHourlyCount>;
 type Totals = Record<SocialMedias, number>;
 declare const createEventAccumulator: () => {
-    increment: (postType: SocialMedias, timestamp: Timestamp) => void;
+    increment: (socialMediaType: SocialMedias, timestamp: Timestamp) => void;
     getData: () => Accumulator;
-    getTotal: (postType: SocialMedias) => number;
+    getTotal: (socialMediaType: SocialMedias) => number;
     getAllTotals: () => Totals;
 };
 

@@ -49,8 +49,8 @@ export const createSSEClient = (url: string, options: SSEOptions = {}) => {
         } else {
           console.warn('Invalid payload:', json)
         }
-      } catch (e) {
-        console.error('Failed to parse SSE message', e)
+      } catch (error) {
+        console.error('Failed to parse SSE message', error)
       }
     }
   }

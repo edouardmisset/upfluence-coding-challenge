@@ -17,7 +17,7 @@ vi.stubGlobal(
 )
 
 describe('SSEClient', () => {
-  const url = 'http://test-stream.com'
+  const url = 'https://test-stream.com'
   const handlers = {
     onMessage: vi.fn(),
     onError: vi.fn(),
@@ -43,7 +43,7 @@ describe('SSEClient', () => {
     expect(handlers.onOpen).toHaveBeenCalled()
 
     // Test Message
-    const timestamp = 1672531200
+    const timestamp = 1_672_531_200
     mockEventSource.onmessage?.({
       data: JSON.stringify({ instagram_media: { timestamp } }),
     })

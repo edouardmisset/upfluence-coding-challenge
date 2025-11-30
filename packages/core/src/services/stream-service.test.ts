@@ -58,7 +58,7 @@ describe('StreamService', () => {
 
     // Simulate message
     mockEventSource.onmessage?.({
-      data: JSON.stringify({ instagram_media: { timestamp: 1672531200 } }),
+      data: JSON.stringify({ instagram_media: { timestamp: 1_672_531_200 } }),
     })
 
     // Wait for update interval

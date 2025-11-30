@@ -15,5 +15,6 @@ export function calculateIntensity({
   count: number
   maxCount: number
 }) {
-  return 0 < count ? Math.ceil((count / maxCount) * 5) : 0
+  const numberOfBuckets = 5
+  return 0 < count ? Math.ceil((count / maxCount) * numberOfBuckets) : 0
 }
