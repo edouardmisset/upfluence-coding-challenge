@@ -2,7 +2,7 @@
   "name": "web",
   "type": "module",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -18,8 +18,8 @@
     "@astrojs/react": "^4.4.2",
     "@astrojs/svelte": "^7.2.2",
     "@astrojs/vue": "^5.1.3",
-    "@upfluence/core": "workspace:*",
-    "@upfluence/styles": "workspace:*",
+    "@upfluence/core": "1.0.1",
+    "@upfluence/styles": "1.1.0",
     "astro": "^5.16.2",
     "preact": "^10.27.2",
     "react": "^19.2.0",
@@ -34,7 +34,7 @@
     "@playwright/test": "^1.57.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@upfluence/tsconfig": "workspace:*",
+    "@upfluence/tsconfig": "1.0.0",
     "typescript": "~5.9.3"
   }
 }

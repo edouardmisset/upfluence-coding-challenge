@@ -1,3 +1,9 @@
+## web [1.1.1](https://github.com/edouardmisset/upfluence-coding-challenge/compare/web@1.1.0...web@1.1.1) (2025-12-01)
+
+### Performance Improvements
+
+- add a link preconnect tag for better perf ([aef08e0](https://github.com/edouardmisset/upfluence-coding-challenge/commit/aef08e09e1b7983f5684be7bf4af4b3b412f1e1d))
+
 # web [1.1.0](https://github.com/edouardmisset/upfluence-coding-challenge/compare/web@1.0.0...web@1.1.0) (2025-12-01)
 
 ### Bug Fixes
