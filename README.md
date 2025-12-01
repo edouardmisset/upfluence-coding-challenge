@@ -32,6 +32,8 @@ for social media event streams. It is designed to ingest high-frequency
 Server-Sent Events (SSE), aggregate them in real-time, and visualize the density
 of post types over a weekly schedule using a 3D-style calendar heatmap.
 
+![An image showing the implemented solution as a heatmap with more than 50 000 events](durability-test.png)
+
 The solution is architected as a monorepo to strictly separate the core business
 logic (data ingestion, validation, aggregation) from the presentation layer.
 This ensures that the complex stream processing logic is robust, testable, and
