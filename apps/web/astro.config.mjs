@@ -9,16 +9,8 @@ export default defineConfig({
   base: '/upfluence-coding-challenge',
   integrations: [react(), vue(), svelte()],
   vite: {
-    resolve: {
-      preserveSymlinks: true,
-    },
     optimizeDeps: {
-      exclude: ['@upfluence/core'],
+      exclude: ['@upfluence/core', '@upfluence/styles'],
     },
-    server: {
-      watch: {
-        ignored: ['!**/node_modules/@upfluence/**']
-      }
-    }
   }
 })
