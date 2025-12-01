@@ -15,9 +15,9 @@ export const SocialEventCard = memo(
   }: Props & React.HTMLAttributes<HTMLElement>) => (
     <article className="social-event-card" data-social={socialMedia} {...props}>
       <header className="social-event-header">
-        <h3 className="social-event-title">
+        <h2 className="social-event-title">
           {SOCIAL_MEDIA_TEXT_MAP[socialMedia]}
-        </h3>
+        </h2>
         <data className="social-event-count" value={count}>
           {count}
         </data>
