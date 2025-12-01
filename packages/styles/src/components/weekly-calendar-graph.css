@@ -6,9 +6,9 @@
 }
 
 .weekly-calendar-graph-label {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   text-align: center;
-  color: color-mix(in oklch, var(--social-color), white 85%);
+  color: var(--text-secondary);
   opacity: 0.75;
 }
 
