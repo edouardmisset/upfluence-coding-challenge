@@ -1,6 +1,6 @@
 {
   "name": "@upfluence/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -12,7 +12,7 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@upfluence/tsconfig": "workspace:*",
+    "@upfluence/tsconfig": "1.0.0",
     "eslint": "^9.39.1",
     "tsup": "^8.5.0",
     "typescript": "^5.9.0",

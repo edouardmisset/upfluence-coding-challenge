@@ -1,3 +1,9 @@
+## @upfluence/core [1.0.1](https://github.com/edouardmisset/upfluence-coding-challenge/compare/@upfluence/core@1.0.0...@upfluence/core@1.0.1) (2025-12-01)
+
+### Dependencies
+
+- **@upfluence/tsconfig:** upgraded to 1.0.0
+
 # @upfluence/core 1.0.0 (2025-11-29)
 
 ## Features
