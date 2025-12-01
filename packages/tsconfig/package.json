@@ -1,6 +1,7 @@
 {
   "name": "@upfluence/tsconfig",
   "version": "1.0.0",
+  "description": "Shared TypeScript configuration",
   "private": true,
   "files": [
     "base.json"
