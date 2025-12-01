@@ -1,3 +1,18 @@
+# web [1.1.0](https://github.com/edouardmisset/upfluence-coding-challenge/compare/web@1.0.0...web@1.1.0) (2025-12-01)
+
+### Bug Fixes
+
+- change heading level from h3 to h2 for social event title ([802087b](https://github.com/edouardmisset/upfluence-coding-challenge/commit/802087b76d85eb7913e7f5ddffd26481414b4492))
+
+### Features
+
+- add a link to navigate back "home" ([4b34e4d](https://github.com/edouardmisset/upfluence-coding-challenge/commit/4b34e4d8ee53965731ea3ba3a265e459bf6ddfc7)), closes [#7](https://github.com/edouardmisset/upfluence-coding-challenge/issues/7)
+
+### Dependencies
+
+- **@upfluence/core:** upgraded to 1.0.1
+- **@upfluence/tsconfig:** upgraded to 1.0.0
+
 # web 1.0.0 (2025-11-29)
 
 ## Bug Fixes
