@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/layout.astro'
+import { App } from '../preact-viz/app'
+---
+
+<Layout title="Preact Visualization - Upfluence Coding Challenge">
+  <App client:only="preact" />
+</Layout>

@@ -13,6 +13,10 @@ const frameworks = [
     name: 'Svelte',
     title: 'Upfluence Live Stream - Svelte',
   },
+  {
+    name: 'Preact',
+    title: 'Upfluence Live Stream - Preact',
+  },
 ]
 
 test.describe('Navigation', () => {
@@ -28,7 +32,9 @@ test.describe('Navigation', () => {
       })
 
       await test.step(`Navigate to ${framework.name} page`, async () => {
-        await page.getByRole('link', { name: framework.name }).click()
+        await page
+          .getByRole('link', { name: framework.name, exact: true })
+          .click()
       })
 
       await test.step('Check page content', async () => {
