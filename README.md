@@ -124,21 +124,25 @@ complexity with the constraints of the challenge.
   aggregated buckets to `IndexedDB` (client-side) or a time-series database
   (server-side) to allow for historical analysis and session restoration.
 
-### 2. DOM vs. Canvas/WebGL
+### 2. Main Thread vs. Web Workers
 
-- **Current Approach**: CSS Grid and DOM nodes.
-- **Trade-off**: If the refresh rate were to increase significantly, DOM
-  manipulation could become a bottleneck and canvas would be more efficient.
-- **Production Solution**: For larger datasets, migrating to WebGL (via
-  Three.js) or Canvas would be necessary to maintain high refresh rate.
+- **Current Approach**: Data parsing and aggregation happen on the main thread.
+- **Trade-off**: Extremely high event rates (e.g., >5000 events/s) could cause
+  UI jank or frame drops.
+- **Production Solution**: Offload the `SSEClient` and `EventAccumulator` to a
+  **Web Worker**. This would keep the UI thread free for rendering only, ensuring
+  smooth 60fps animations regardless of data volume.
 
-### 3. Testing Strategy
+### 3. Framework Choice (React/Vue/Svelte vs. Ember.js)
 
-- **Current Approach**: Heavy focus on Unit Tests for `packages/core` (100%
-  coverage of logic).
-- **Trade-off**: E2E tests (Playwright) are minimal.
-- **Production Solution**: Expand E2E coverage to simulate network failures and
-  verify recovery UI flows automatically.
+- **Current Approach**: Used modern, highly popular frameworks (React, Vue,
+  Svelte).
+- **Trade-off**: The spec mentioned **Ember.js** as a bonus (Upfluence stack).
+  I chose to demonstrate versatility across the most common modern frameworks
+  instead.
+- **Production Solution**: If integrating into an existing Ember.js application,
+  I would wrap the core logic (which is framework-agnostic) in an Ember Service
+  and Component.
 
 ## Getting Started
 
