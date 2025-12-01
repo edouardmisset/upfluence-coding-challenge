@@ -14,11 +14,20 @@
 
 <main class="dashboard-container">
   <header class="dashboard-header">
-    <div>
-      <h1 class="dashboard-title">Upfluence Live Stream - Svelte</h1>
-      <p class="dashboard-subtitle">
-        Real-time social media events visualization
-      </p>
+    <div class="dashboard-header-left">
+      <a
+        href="/upfluence-coding-challenge"
+        aria-label="Back to home"
+        class="dashboard-back-link"
+      >
+        ⬅️
+      </a>
+      <div>
+        <h1 class="dashboard-title">Upfluence Live Stream - Svelte</h1>
+        <p class="dashboard-subtitle">
+          Real-time social media events visualization
+        </p>
+      </div>
     </div>
 
     <div class="dashboard-status-container">
