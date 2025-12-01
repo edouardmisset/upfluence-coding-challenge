@@ -62,7 +62,7 @@
 
 .social-event-count {
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
   background: var(--bg-surface-hover);
   padding-inline: var(--space-sm);
   padding-block: var(--space-xs);

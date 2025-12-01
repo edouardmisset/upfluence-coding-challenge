@@ -14,11 +14,20 @@ export function Dashboard() {
   return (
     <main className="dashboard-container">
       <header className="dashboard-header">
-        <div>
-          <h1 className="dashboard-title">Upfluence Live Stream - React</h1>
-          <p className="dashboard-subtitle">
-            Real-time social media events visualization
-          </p>
+        <div className="dashboard-header-left">
+          <a
+            href="/upfluence-coding-challenge"
+            aria-label="Back to home"
+            className="dashboard-back-link"
+          >
+            ⬅️
+          </a>
+          <div>
+            <h1 className="dashboard-title">Upfluence Live Stream - React</h1>
+            <p className="dashboard-subtitle">
+              Real-time social media events visualization
+            </p>
+          </div>
         </div>
 
         <div className="dashboard-status-container">

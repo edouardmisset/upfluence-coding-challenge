@@ -81,11 +81,11 @@
   );
 
   /* Typography */
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
+  --font-size-xs: 0.5rem;
+  --font-size-sm: 0.75rem;
   --font-size-md: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.5rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 2rem;
   --font-weight-normal: 400;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
