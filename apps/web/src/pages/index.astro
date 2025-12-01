@@ -30,6 +30,11 @@ import Layout from '../layouts/layout.astro'
         class="btn"
         data-variant="svelte">Svelte</a
       >
+      <a
+        href="/upfluence-coding-challenge/preact-viz"
+        class="btn"
+        data-variant="preact">Preact</a
+      >
     </div>
   </main>
 </Layout>
@@ -91,6 +96,10 @@ import Layout from '../layouts/layout.astro'
 
     &[data-variant='svelte'] {
       --button-color: var(--color-svelte);
+    }
+
+    &[data-variant='preact'] {
+      --button-color: var(--color-preact);
     }
 
     &:hover {

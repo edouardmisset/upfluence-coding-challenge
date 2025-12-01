@@ -15,7 +15,7 @@
     "lint:spell": "cspell --cache \"**/*\"",
     "format": "prettier --cache --write \"**/*.{ts,tsx,md,html,js,json,css}\"",
     "test": "turbo run test",
-    "benchmark": "pnpx tsx scripts/benchmark.ts",
+    "benchmark": "pnpx tsx scripts/benchmark.mts",
     "release": "turbo run build && multi-semantic-release",
     "prepare": "husky"
   },

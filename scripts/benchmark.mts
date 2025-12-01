@@ -1,19 +1,21 @@
+/* eslint-disable sonarjs/no-os-command-from-path */
 import { execSync, spawn } from 'node:child_process'
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { resolve, join, dirname } from 'node:path'
+import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { gzipSizeSync } from 'gzip-size'
 import { chromium } from 'playwright'
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const DIST = join(ROOT, 'apps/web/dist')
-const OUT_FILE = join(ROOT, 'BENCHMARK.md')
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const DIST = path.join(ROOT, 'apps/web/dist')
+const OUT_FILE = path.join(ROOT, 'BENCHMARK.md')
 const BASE_PATH = '/upfluence-coding-challenge'
 
 const TARGETS = [
   { framework: 'React', page: 'react-viz' },
   { framework: 'Vue', page: 'vue-viz' },
   { framework: 'Svelte', page: 'svelte-viz' },
+  { framework: 'Preact', page: 'preact-viz' },
 ]
 
 function getAssets(html: string) {
@@ -29,10 +31,10 @@ function getAssets(html: string) {
     /(?:component|renderer)-url=["']([^"']+)["']/g,
   ]
 
-  regexes.forEach((reg) => {
+  for (const reg of regexes) {
     let match
     while ((match = reg.exec(html))) add(match[1])
-  })
+  }
 
   const linkRegExp = /<link[^>]+href=["']([^"']+)["'][^>]*>/g
   let match
@@ -44,22 +46,22 @@ function getAssets(html: string) {
 }
 
 function measureSize(page: string) {
-  const htmlPath = join(DIST, page, 'index.html')
+  const htmlPath = path.join(DIST, page, 'index.html')
   if (!existsSync(htmlPath)) throw new Error(`Missing ${htmlPath}`)
 
-  const html = readFileSync(htmlPath, 'utf-8')
-  const files = [htmlPath, ...getAssets(html).map((p) => join(DIST, p))]
-
+  const html = readFileSync(htmlPath, 'utf8')
+  const files = [htmlPath, ...getAssets(html).map((p) => path.join(DIST, p))]
   let raw = 0
   let gzip = 0
-  files.forEach((file) => {
-    if (!existsSync(file)) return console.warn(`Missing: ${file}`)
+  for (const file of files) {
+    if (!existsSync(file)) { console.warn(`Missing: ${file}`); continue }
     const content = readFileSync(file)
     raw += content.length
     gzip += gzipSizeSync(content)
-  })
+  }
 
-  return { raw: Math.round(raw / 1024), gzip: Math.round(gzip / 1024) }
+  const bufferSize = 1024
+  return { raw: Math.round(raw / bufferSize), gzip: Math.round(gzip / bufferSize) }
 }
 
 async function startServer() {
@@ -75,7 +77,7 @@ async function startServer() {
       const match = str.match(/http:\/\/localhost:(\d+)/)
       if (match) {
         resolve({
-          port: parseInt(match[1]),
+          port: Number.parseInt(match[1]),
           kill: () => server.kill(),
         })
       }
@@ -141,11 +143,11 @@ async function main() {
 
     writeFileSync(OUT_FILE, `# Benchmark Results\n\n${table}\n${methodology}`)
     console.log(`Written to ${OUT_FILE}`)
-    process.exit(0)
-  } catch (e) {
-    console.error(e)
-    process.exit(1)
+    return
+  } catch (error) {
+    console.error(error)
+    throw error
   }
 }
 
-main()
+await main()
