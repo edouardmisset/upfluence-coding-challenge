@@ -16,7 +16,7 @@
     "format": "prettier --cache --write \"**/*.{ts,tsx,md,html,js,json,css}\"",
     "test": "turbo run test",
     "benchmark": "pnpx tsx scripts/benchmark.mts",
-    "release": "turbo run build && multi-semantic-release",
+    "release": "turbo run build && multi-semantic-release --deps.bump=ignore",
     "prepare": "husky"
   },
   "devDependencies": {
