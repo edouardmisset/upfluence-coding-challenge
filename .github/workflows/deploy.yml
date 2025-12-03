@@ -7,15 +7,13 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
   id-token: write
   pages: write
 
 jobs:
-  release:
-    name: Release & Build
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,11 +37,6 @@ jobs:
       - name: Verify build
         run: pnpm build
 
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm exec multi-semantic-release
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -51,7 +44,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: release
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages

@@ -13,7 +13,6 @@ This project employs a rigorous suite of tools to ensure code quality and mainta
 - **TypeScript**: Provides static type checking for robustness.
 - **Knip**: Detects unused files and dependencies.
 - **Commitlint**: Enforces conventional commit messages.
-- **Semantic Release**: Automates versioning and package publishing.
 - **CSpell**: Checks for spelling errors in code and documentation.
 - **Stylelint**: Lints CSS for errors and consistency.
 - **GitHub Actions**: Automates CI/CD pipelines for testing and deployment.

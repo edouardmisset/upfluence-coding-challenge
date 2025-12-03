@@ -3,10 +3,7 @@
   "commitlint": {
     "config": [".commitlintrc.json"]
   },
-  "ignoreDependencies": [
-    "@commitlint/cli",
-    "conventional-changelog-conventionalcommits"
-  ],
+  "ignoreDependencies": ["@commitlint/cli"],
   "workspaces": {
     ".": {
       "entry": [
